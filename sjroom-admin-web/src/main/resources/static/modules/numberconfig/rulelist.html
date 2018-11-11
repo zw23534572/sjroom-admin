@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>单号规则管理</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+    <link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" href="../../css/main.css">
+    <script src="../../libs/jquery.min.js"></script>
+    <script src="../../plugins/layer/layer.js"></script>
+    <script src="../../libs/bootstrap.min.js"></script>
+    <script src="../../libs/vue.min.js"></script>
+    <script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+    <script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+    <script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+    <script src="../../js/common.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div  v-show="showList">
+        <div class="grid-btn form-inline">
+            <div class="form-group">
+                <input type="text" class="form-control" v-model="q.ruleCode" @keyup.enter="query" placeholder="规则编码">
+            </div>
+            <a class="btn btn-success" @click="query"><span class="glyphicon glyphicon-search"></span>&nbsp;查询</a>
+            <a v-if="hasPermission('msg:template:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <!--<a v-if="hasPermission('msg:template:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>-->
+            <a v-if="hasPermission('msg:template:delete')" class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">规则编码<span style="color: red">*</span></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="model.ruleCode" placeholder="请输入规则编码" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">规则名称<span style="color: red">*</span></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="model.ruleName" placeholder="请输入规则名称" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">规则内容<span style="color: red">*</span></div>
+                <div class="col-sm-10">
+                    <textarea class="form-control" v-model="model.ruleContent" @change="changeRule" placeholder="请输入规则内容,如:201+#systemName+#date(yyyy-MM-dd)+#seq+'taohua'
+1.#后面的参数表示调用服务时候动态指定.
+2.每个组成部分用加号(+)连接.
+3.常量需要加单引号('')
+4.日期格式关键字#date(yyyy-MM-dd).
+5.序列号关键字#seq，不配时，默认在规则后追加序列号" rows="8" ></textarea>
+                    <input type="button" class="btn btn-primary" @click="validateRule" value="验证规则"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">验证结果</div>
+                <div>
+                    <div id="example" class="col-sm-10"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">序列起始值</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="model.seqStartValue" placeholder="请输入序列起始值,默认0" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">序列部分长度</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="model.seqLength"  placeholder="请输入序列部分长度,默认8" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="save" value="保存"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="../../js/modules/numberconfig/rulelist.js"></script>
+</body>
+</html>

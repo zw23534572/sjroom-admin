@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+
+    <Properties>
+        <Property name="logDir">/export/logs</Property>
+        <Property name="logFileName">server</Property>
+        <!-- d天 m分 s秒 保留配置的最近时间日志 -->
+        <Property name="deleteLog">3d</Property>
+    </Properties>
+
+    <appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%p %d [%t] %c.%M():%L - %m%n" />
+        </Console>
+
+        <RollingFile name="FILE" fileName="${logDir}/${logFileName}.log" append="true"
+                     filePattern="${logDir}/${logFileName}.%d{yyyy-MM-dd}.log">
+            <PatternLayout charset="utf-8" pattern="%p %d [%t] %c.%M():%L - %m%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="${logDir}">
+                    <IfFileName glob="${logFileName}.*.log" />
+                    <IfLastModified age="${deleteLog}" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </appenders>
+
+    <loggers>
+        <logger name="org.springframework" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="org.apache.http" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="org.apache.zookeeper" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="com.baidu.disconf" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="org.hibernate.validator" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="org.apache.curator.framework" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="com.baomidou.mybatisplus" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="org.mybatis.spring.mapper" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="org.apache.commons.beanutils" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="org.quartz.core" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+        <logger name="com.netflix.config" level="ERROR" additivity="false">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+        </logger>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE" />
+            <appender-ref ref="FILE" />
+
+        </root>
+    </loggers>
+</configuration>

@@ -1,0 +1,33 @@
+variables:
+    base_docker_file: https://git.dazong.com/platform/basedockerfile/raw/master/dz-gitlab-ci
+    project_name: sjroom-admin  #改成你的项目名
+
+stages:
+    - build
+    - push
+
+code_review:
+    stage: build
+    script:
+         - curl -O "$base_docker_file/code_review.sh" >> code_review.sh
+         - source code_review.sh
+    only:
+      - /^feature\/.*$/
+      - /^release\/.*$/
+      - /^hotfix\/.*$/
+
+sonar:
+    stage: build
+    script:
+         - curl -O "$base_docker_file/sonar.sh" >> sonar.sh
+         - source sonar.sh
+    only:
+      - develop
+      - master
+
+docker_build:
+    stage: build
+    script:
+       - curl -O "$base_docker_file/docker_build.sh" >> docker_build.sh
+       - source docker_build.sh
+

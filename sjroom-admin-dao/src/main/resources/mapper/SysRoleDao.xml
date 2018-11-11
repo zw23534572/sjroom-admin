@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.sjroom.dao.SysRoleDao">
+
+	<select id="queryList" resultType="com.github.sjroom.domain.entity.SysRole">
+		select * from sys_role 
+		<where>
+			<if test="roleName != null and roleName.trim() != ''">
+				and `role_name` like concat('%',#{roleName},'%') 
+			</if>
+			<if test="createUser != null">
+				and create_user = #{createUser}
+			</if>
+		</where>
+		<choose>
+			<when test="orderBy != null and orderBy.trim() != ''">
+				order by ${orderBy} ${asc}
+			</when>
+			<otherwise>
+				order by id asc
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 查询用户创建的角色ID列表 -->
+	<select id="queryRoleIdList" resultType="long">
+		select id from sys_role where create_user = #{createUser}
+	</select>
+
+	<select id="queryListByUserId" resultType="com.github.sjroom.domain.entity.SysRole">
+		SELECT sysr.* FROM sys_role sysr
+		INNER JOIN sys_user_role sysur
+		ON sysr.id = sysur.role_id AND sysur.user_id = #{userId}
+	</select>
+</mapper>

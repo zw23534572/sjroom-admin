@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <title>知识包列表</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../plugins/jqgrid/ui.jqgrid-bootstrap.css">
+    <link rel="stylesheet" href="../../plugins/ztree/css/metroStyle/metroStyle.css">
+    <link rel="stylesheet" href="../../css/main.css">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn form-inline">
+            <select class="form-control" v-model="q.appCode" @change="changePackAgeApp">
+                <option value="">选择系统</option>
+                <option v-for="item in apps" v-model="item.appCode">{{ item.appCode }}</option>
+            </select>
+            <input type="text" class="form-control" v-model="q.name" style="width: 400px" @keyup.enter="query" placeholder="知识包名称">
+            <a class="btn btn-success" @click="query"><span class="glyphicon glyphicon-search"></span>&nbsp;查询</a>
+            <a v-if="hasPermission('rule:package:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            <a v-if="hasPermission('rule:package:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            <a v-if="hasPermission('rule:package:publish')" class="btn btn-warning" @click="publish"><i class="fa fa-circle-o"></i>&nbsp;发布</a>
+            <a v-if="hasPermission('rule:package:unpublish')" class="btn btn-warning" @click="unpublish"><i class="fa fa-circle-o"></i>&nbsp;取消发布</a>
+            <a v-if="hasPermission('rule:package:delete')" class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">系统名称<span style="color: red">*</span></div>
+                <div class="col-sm-10">
+                    <select class="form-control" v-model="model.appCode" @change="changeApp" :disabled="model.id!=null && model.appCode != null">
+                        <option value="">选择系统</option>
+                        <option v-for="item in apps" v-model="item.appCode">{{ item.appCode }}</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">知识包标识<span style="color: red">*</span></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="model.code" placeholder="知识包标识" :disabled="model.code != null"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">知识包名称</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" v-model="model.name" placeholder="知识包名称" :disabled="isReadOnly"/>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">知识包说明</div>
+                <div class="col-sm-10">
+                    <textarea class="form-control" v-model="model.remark" placeholder="知识包说明" rows="3" :disabled="isReadOnly"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label">规则文件列表*<a class="btn btn-primary" @click="addRuleFile()" v-show="!isReadOnly"><i class="fa fa-plus"></i>&nbsp;添加</a>
+                </div>
+                <div class="col-sm-10">
+                    <table id="jqRuleFileGrid"></table>
+                    <div id="jqRuleFileGridPager"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" v-show="!isReadOnly" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+
+        </form>
+    </div>
+</div>
+<script src="../../libs/jquery.min.js"></script>
+<script src="../../plugins/layer/layer.js"></script>
+<script src="../../libs/bootstrap.min.js"></script>
+<script src="../../libs/vue.min.js"></script>
+<script src="../../plugins/jqgrid/grid.locale-cn.js"></script>
+<script src="../../plugins/jqgrid/jquery.jqGrid.min.js"></script>
+<script src="../../plugins/ztree/jquery.ztree.all.min.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../../js/modules/rule/package-info.js"></script>
+</body>
+</html>

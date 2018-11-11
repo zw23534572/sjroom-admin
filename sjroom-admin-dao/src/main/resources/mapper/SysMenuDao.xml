@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.github.sjroom.dao.SysMenuDao">
+
+	<resultMap id="BaseResultMap" type="com.github.sjroom.domain.response.SysMenuResponse">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="parent_id" property="parentId" jdbcType="BIGINT"/>
+		<result column="parentName" property="parentName" jdbcType="VARCHAR"/>
+		<result column="name" property="name" jdbcType="VARCHAR"/>
+		<result column="url" property="url" jdbcType="VARCHAR"/>
+		<result column="perms" property="perms" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="INTEGER"/>
+		<result column="icon" property="icon" jdbcType="VARCHAR"/>
+		<result column="order_num" property="orderNum" jdbcType="INTEGER"/>
+	</resultMap>
+
+	<select id="queryListParentId" resultMap="BaseResultMap">
+		select * from sys_menu where parent_id = #{parentId} order by order_num asc
+	</select>
+
+	<select id="queryNotButtonList"  resultMap="BaseResultMap">
+		select * from sys_menu where type != 2 order by order_num asc
+	</select>
+
+	<select id="selectPage"  resultMap="BaseResultMap">
+		select m.*,(select p.name from sys_menu p where p.id = m.parent_id) as parentName
+		from sys_menu m
+		<choose>
+			<when test="orderBy != null and orderBy.trim() != ''">
+				order by ${orderBy} ${asc}
+			</when>
+			<otherwise>
+				order by id desc
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- 查询用户的权限列表 -->
+	<select id="queryUserList"  resultMap="BaseResultMap">
+		select distinct m.*,(select p.name from sys_menu p where p.id = m.parent_id) as parentName
+		from sys_user_role ur
+		LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id
+		LEFT JOIN sys_menu m on rm.id = m.id
+		where ur.user_id = #{userId} order by m.order_num asc
+	</select>
+</mapper>
