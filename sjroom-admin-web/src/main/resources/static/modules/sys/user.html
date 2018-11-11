@@ -24,7 +24,7 @@
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn form-inline">
-            <input type="text" class="form-control" style="width:400px;" v-model="q.user_name" @keyup.enter="query" placeholder="用户名">
+            <input type="text" class="form-control" style="width:400px;" v-model="q.key" @keyup.enter="query" placeholder="用户名">
             <a class="btn btn-success" @click="query"><span class="glyphicon glyphicon-search"></span>&nbsp;查询</a>
             <a v-if="hasPermission('sys:user:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
             <a v-if="hasPermission('sys:user:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
@@ -78,10 +78,10 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label">状态</div>
                 <label class="radio-inline">
-                    <input type="radio" name="status" value="0" v-model="user.status"/> 禁用
+                    <input type="radio" name="status" value="0" v-model="user.yn"/> 禁用
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="status" value="1" v-model="user.status"/> 正常
+                    <input type="radio" name="status" value="1" v-model="user.yn"/> 正常
                 </label>
             </div>
             <div class="form-group">

@@ -1,7 +1,9 @@
 package com.github.sjroom.oauth2;
 
 import com.github.sjroom.common.AbstractBase;
+import com.github.sjroom.common.CommonStatus;
 import com.github.sjroom.common.Constant;
+import com.github.sjroom.common.exception.BusinessException;
 import com.github.sjroom.common.util.AssertUtil;
 import com.github.sjroom.domain.entity.SysUser;
 import com.github.sjroom.domain.entity.SysUserToken;
@@ -47,7 +49,7 @@ public class UrlInterceptor extends AbstractBase implements HandlerInterceptor {
         SysUserToken tokenEntity = shiroService.queryByToken(accessToken);
         //token失效
         if (tokenEntity == null || tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {
-            AssertUtil.throwBusinessException("token失效，请重新登录");
+            throw new BusinessException(CommonStatus.TOKEN_ERROR);
         }
 
         //查询用户信息
@@ -86,8 +88,8 @@ public class UrlInterceptor extends AbstractBase implements HandlerInterceptor {
         if (StringUtils.isEmpty(token)) {
             token = (String) httpRequest.getSession().getAttribute("token");
         }
-        if (StringUtils.isEmpty(token)){
-            AssertUtil.throwBusinessException("token失效，请重新登录");
+        if (StringUtils.isEmpty(token)) {
+            throw new BusinessException(CommonStatus.TOKEN_ERROR);
         }
         return token;
     }

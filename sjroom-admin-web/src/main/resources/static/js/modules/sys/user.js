@@ -6,8 +6,6 @@ $(function () {
             {label: '用户ID', name: 'id', index: "id", width: 45, key: true},
             {label: '账号', name: 'account', index: "account", width: 75},
             {label: '用户名', name: 'userName', index: "user_name", width: 40},
-            {label: '钉钉ID', name: 'dingdingId', index: "dingding_id", width: 90},
-            {label: '微信ID', name: 'weixinId', index: "weixin_id", width: 90},
             {label: '邮箱', name: 'email', width: 120},
             {label: '手机号', name: 'mobile', width: 65},
             {
@@ -29,14 +27,14 @@ $(function () {
         multiselect: true,
         pager: "#jqGridPager",
         jsonReader: {
-            root: "page.records",
-            page: "page.current",
-            total: "page.pages",
-            records: "page.total"
+            root: "data.data",
+            page: "data.pageNo",
+            total: "data.totalPage",
+            records: "data.totalItem"
         },
         prmNames: {
-            page: "page",
-            rows: "limit",
+            page: "pageNo",
+            rows: "pageSize",
             order: "order"
         },
         gridComplete: function () {
@@ -50,7 +48,7 @@ var vm = new Vue({
     el: '#rrapp',
     data: {
         q: {
-            user_name: null
+            key: null
         },
         showList: true,
         title: null,
@@ -134,21 +132,21 @@ var vm = new Vue({
         },
         getUser: function (id) {
             $.get(baseURL + "sys/user/info/" + id, function (r) {
-                vm.user = r.data.user;
+                vm.user = r.data;
                 vm.user.password = null;
             });
         },
         getRoleList: function () {
             $.get(baseURL + "sys/role/select", function (r) {
-                vm.roleList = r.data.list;
+                vm.roleList = r.data;
             });
         },
         reload: function () {
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
-                postData: {'user_name': vm.q.user_name},
-                page: page
+                postData: {'key': vm.q.key},
+                pageNo: page
             }).trigger("reloadGrid");
         },
         validator: function () {

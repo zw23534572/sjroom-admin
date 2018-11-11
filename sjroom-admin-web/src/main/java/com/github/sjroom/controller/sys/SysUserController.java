@@ -69,21 +69,26 @@ public class SysUserController extends BaseController {
      * 修改登录用户密码
      */
     @RequestMapping("/password")
-    public void password(String password, String newPassword) {
-        AssertUtil.notNull(newPassword, "新密码不为能空");
+    public int password(String password, String newPassword) {
+        AssertUtil.notBlank(password, "原始密码");
+        AssertUtil.notBlank(newPassword, "新密码");
 
         //sha256加密
-
         password = TokenGeneratorUtil.generateValue(password);
         //sha256加密
         newPassword = TokenGeneratorUtil.generateValue(newPassword);
 
-        //更新密码
-        int count = sysUserService.updatePassword(getUserId(), password, newPassword);
-        if (count == 0) {
+        SysUser sysUser = getUser();
+        if (!sysUser.getPassword().equals(password)){
             AssertUtil.throwBusinessException("原密码不正确");
         }
 
+        //更新密码
+        int count = sysUserService.updatePassword(getUserId(), password, newPassword);
+        if (count == 0) {
+            AssertUtil.throwBusinessException("更新操作,错误.");
+        }
+        return 1;
     }
 
     /**
@@ -108,7 +113,7 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("sys:user:save")
-    public void save(@RequestBody SysUserVO sysUserVO) {
+    public int save(@RequestBody SysUserVO sysUserVO) {
         ValidatorUtils.validateEntity(sysUserVO, AddGroup.class);
         sysUserVO.setCreateUser(getCreateUser());
 
@@ -130,6 +135,7 @@ public class SysUserController extends BaseController {
         }
 
         sysUserService.save(sysUserVO);
+        return 1;
     }
 
     /**
@@ -137,10 +143,11 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("sys:user:update")
-    public void update(@RequestBody SysUserVO sysUserVO) {
+    public int update(@RequestBody SysUserVO sysUserVO) {
         ValidatorUtils.validateEntity(sysUserVO, UpdateGroup.class);
         sysUserVO.setCreateUser(getCreateUser());
         sysUserService.save(sysUserVO);
+        return 1;
     }
 
     /**
@@ -148,7 +155,8 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:user:delete")
-    public void delete(@RequestBody Long[] userIds) {
+    public int delete(@RequestBody Long[] userIds) {
         sysUserService.deleteBatch(userIds);
+        return 1;
     }
 }

@@ -90,7 +90,7 @@ public class SysMenuController extends BaseController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("sys:menu:save")
-    public void save(@RequestBody SysMenuRequest sysMenuRequest) {
+    public int save(@RequestBody SysMenuRequest sysMenuRequest) {
         //数据校验
         verifyForm(sysMenuRequest);
         SysMenu sysMenu = new SysMenu();
@@ -100,6 +100,7 @@ public class SysMenuController extends BaseController {
             sysMenu.setIcon("/images/f06.png");
         }
         sysMenuService.insertOrUpdate(sysMenu);
+        return 1;
     }
 
     /**
@@ -107,12 +108,13 @@ public class SysMenuController extends BaseController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("sys:menu:update")
-    public void update(@RequestBody SysMenuRequest sysMenuRequest) {
+    public int update(@RequestBody SysMenuRequest sysMenuRequest) {
         //数据校验
         verifyForm(sysMenuRequest);
         SysMenu sysMenu = new SysMenu();
         BeanUtils.copyProperties(sysMenuRequest, sysMenu);
         sysMenuService.insertOrUpdate(sysMenu);
+        return 1;
     }
 
     /**
@@ -120,7 +122,7 @@ public class SysMenuController extends BaseController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:menu:delete")
-    public void delete(long menuId) {
+    public int delete(long menuId) {
 
         List<String> roleNameList = sysRoleMenuDao.queryRoleNameByMenuId(menuId);
         if (roleNameList != null && roleNameList.size() > 0) {
@@ -137,6 +139,7 @@ public class SysMenuController extends BaseController {
             AssertUtil.throwBusinessException("请先删除子菜单或按钮");
         }
         sysMenuService.deleteById(menuId);
+        return 1;
     }
 
     /**

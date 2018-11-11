@@ -18,14 +18,14 @@ $(function () {
         multiselect: true,
         pager: "#jqGridPager",
         jsonReader: {
-            root: "page.records",
-            page: "page.current",
-            total: "page.pages",
-            records: "page.total"
+            root: "data.data",
+            page: "data.pageNo",
+            total: "data.totalPage",
+            records: "data.totalItem"
         },
         prmNames: {
-            page: "page",
-            rows: "limit",
+            page: "pageNo",
+            rows: "pageSize",
             order: "order"
         },
         gridComplete: function () {
@@ -58,7 +58,7 @@ var vm = new Vue({
     el: '#rrapp',
     data: {
         q: {
-            roleName: null
+            key: null
         },
         showList: true,
         title: null,
@@ -110,7 +110,7 @@ var vm = new Vue({
         },
         getRole: function (id) {
             $.get(baseURL + "sys/role/info/" + id, function (r) {
-                vm.role = r.data.role;
+                vm.role = r.data;
 
                 //勾选角色所拥有的菜单
                 var menuIds = vm.role.menuIdList;
@@ -153,7 +153,7 @@ var vm = new Vue({
         getMenuTree: function (id) {
             //加载菜单树
             $.get(baseURL + "sys/menu/list", function (r) {
-                ztree = $.fn.zTree.init($("#menuTree"), setting, r);
+                ztree = $.fn.zTree.init($("#menuTree"), setting, r.data);
                 //展开所有节点
                 ztree.expandAll(true);
 
@@ -166,8 +166,8 @@ var vm = new Vue({
             vm.showList = true;
             var page = $("#jqGrid").jqGrid('getGridParam', 'page');
             $("#jqGrid").jqGrid('setGridParam', {
-                postData: {'roleName': vm.q.roleName},
-                page: page
+                postData: {'key': vm.q.key},
+                pageNo: page
             }).trigger("reloadGrid");
         },
         validator: function () {

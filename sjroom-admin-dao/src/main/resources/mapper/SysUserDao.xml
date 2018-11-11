@@ -10,12 +10,12 @@
 				and `create_user` = #{createUser}
 			</if>
 			<if test="key != null and key.trim() != ''">
-				and `user_name` like concat('%',#{key},'%')
+				and (`user_name` like concat('%',#{key},'%') or `account` like concat('%',#{key},'%'))
 			</if>
 		</where>
 		<choose>
 			<when test="orderBy != null and orderBy.trim() != ''">
-				order by ${orderBy} ${asc}
+				order by ${orderBy} ${order}
 			</when>
 			<otherwise>
 				order by id desc

@@ -38,10 +38,11 @@ $.ajaxSetup({
         withCredentials: true
     },
     complete: function (xhr) {
+        var code = xhr.responseJSON.code % 1000;
         //token过期，则跳转到登录页面
-        // if (xhr.responseJSON.code == 401 || xhr.responseJSON.code == 500) {
-        //     parent.location.href = baseURL + 'login.html';
-        // }
+        if (code == 401) {
+            parent.location.href = baseURL + 'login.html';
+        }
     }
 });
 
@@ -127,13 +128,13 @@ function isBlank(value) {
 /*弹出层*/
 
 /*
-	参数解释：
-	title	标题
-	url		请求的url
-	id		需要操作的数据id
-	w		弹出层宽度（缺省调默认值）
-	h		弹出层高度（缺省调默认值）
-*/
+ 参数解释：
+ title	标题
+ url		请求的url
+ id		需要操作的数据id
+ w		弹出层宽度（缺省调默认值）
+ h		弹出层高度（缺省调默认值）
+ */
 function layer_show(title, url, w, h, callback) {
     if (title == null || title == '') {
         title = false;

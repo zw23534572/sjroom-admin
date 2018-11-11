@@ -8,6 +8,7 @@ import java.util.List;
 import com.github.sjroom.domain.entity.SysRoleMenu;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class SysRoleMenuServiceImpl implements SysRoleMenuService {
@@ -15,13 +16,16 @@ public class SysRoleMenuServiceImpl implements SysRoleMenuService {
     private SysRoleMenuDao sysRoleMenuDao;
 
     @Override
+    @Transactional
     public void saveOrUpdate(Long roleId, List<Long> menuIdList) {
 
         SysRoleMenu sysRoleMenu = new SysRoleMenu();
         sysRoleMenu.setRoleId(roleId);
-        sysRoleMenu = sysRoleMenuDao.selectOne(sysRoleMenu);
+        List<SysRoleMenu> sysRoleMenuList = sysRoleMenuDao.selectList(sysRoleMenu);
         //先删除角色与菜单关系
-        sysRoleMenuDao.deleteById(sysRoleMenu.getId());
+        for (int i = 0; i < sysRoleMenuList.size(); i++) {
+            sysRoleMenuDao.deleteById(sysRoleMenuList.get(i).getId());
+        }
 
         if (menuIdList.size() == 0) {
             return;

@@ -129,7 +129,12 @@
                 url : options.url,
                 data : parms?parms:options.ajaxParams,
                 dataType : "JSON",
-                success : function(data, textStatus, jqXHR) {
+                success : function(r, textStatus, jqXHR) {
+                    if (!r.success) {
+                        console.log("加载数据出异常");
+                        return;
+                    }
+                    var data = r.data;
                     // 加载完数据先清空
                     tbody.html("");
                     if(!data||data.length<=0){

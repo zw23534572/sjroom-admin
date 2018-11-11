@@ -69,7 +69,7 @@ public class SysUserServiceImpl extends AbstractService implements SysUserServic
     @Override
     public int updatePassword(Long userId, String password, String newPassword) {
         SysUser sysUser = sysUserDao.selectById(userId);
-        sysUser.setPassword(sysUser.getPassword());
+        sysUser.setPassword(newPassword);
         return sysUserDao.updateById(sysUser);
     }
 

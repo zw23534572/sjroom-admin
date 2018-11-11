@@ -73,9 +73,10 @@ public class SysLoginController extends BaseController {
      * 退出
      */
     @RequestMapping(value = "/sys/logout", method = RequestMethod.POST)
-    public void logout(HttpServletRequest request, HttpServletResponse response) {
+    public int logout(HttpServletRequest request, HttpServletResponse response) {
         String token = (String)request.getSession().getAttribute("token");
         sysUserTokenService.logout(token);
+        return 1;
     }
 
 }

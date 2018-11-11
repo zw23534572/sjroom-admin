@@ -3,11 +3,11 @@
 
 <mapper namespace="com.github.sjroom.dao.SysRoleDao">
 
-	<select id="queryList" resultType="com.github.sjroom.domain.entity.SysRole">
+	<select id="selectPage" resultType="com.github.sjroom.domain.entity.SysRole">
 		select * from sys_role 
 		<where>
-			<if test="roleName != null and roleName.trim() != ''">
-				and `role_name` like concat('%',#{roleName},'%') 
+			<if test="key != null and key.trim() != ''">
+				and (`role_name` like concat('%',#{key},'%') or `remark` like concat('%',#{key},'%'))
 			</if>
 			<if test="createUser != null">
 				and create_user = #{createUser}
@@ -15,10 +15,10 @@
 		</where>
 		<choose>
 			<when test="orderBy != null and orderBy.trim() != ''">
-				order by ${orderBy} ${asc}
+				order by ${orderBy} ${order}
 			</when>
 			<otherwise>
-				order by id asc
+				order by id desc
 			</otherwise>
 		</choose>
 	</select>

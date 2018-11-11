@@ -66,10 +66,11 @@ public class SysRoleController extends BaseController {
      */
     @RequestMapping("/save")
     @RequiresPermissions("sys:role:save")
-    public void save(@RequestBody SysRole role) {
+    public int save(@RequestBody SysRole role) {
         ValidatorUtils.validateEntity(role);
         role.setCreateUser(getCreateUser());
         sysRoleService.save(role);
+        return 1;
     }
 
     /**
@@ -77,10 +78,11 @@ public class SysRoleController extends BaseController {
      */
     @RequestMapping("/update")
     @RequiresPermissions("sys:role:update")
-    public void update(@RequestBody SysRole role) {
+    public int update(@RequestBody SysRole role) {
         ValidatorUtils.validateEntity(role);
         role.setCreateUser(getCreateUser());
         sysRoleService.update(role);
+        return 1;
     }
 
     /**
@@ -88,7 +90,8 @@ public class SysRoleController extends BaseController {
      */
     @RequestMapping("/delete")
     @RequiresPermissions("sys:role:delete")
-    public void delete(@RequestBody Long[] roleIds) {
+    public int delete(@RequestBody Long[] roleIds) {
         sysRoleService.deleteBatch(roleIds);
+        return 1;
     }
 }
