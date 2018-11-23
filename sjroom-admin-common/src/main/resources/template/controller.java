@@ -1,20 +1,19 @@
 package ${config.controllerPackage};
 
+import org.springframework.beans.factory.annotation.Autowired;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import ${config.basePackage}.common.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
-import com.github.credit.common.validator.ValidatorUtils;
-import com.github.pagehelper.Page;
-
-import ${config.basePackage}.common.annotation.SysLog;
-import ${config.basePackage}.controller.AbstractController;
+import ${config.basePackage}.common.validator.ValidatorUtils;
+import ${config.basePackage}.common.response.PageResult;
 import ${config.requestEntityPackage}.${upperModelName}Request;
-import ${config.responseEntityPackage}.${upperModelName}Response;
 import ${config.entityPackage}.${upperModelName};
 import ${config.servicePackage}.${upperModelName}Service;
+import ${config.basePackage}.service.SysRoleService;
+import ${config.basePackage}.base.BaseController;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * <B>说明：</B><BR>
@@ -25,46 +24,36 @@ import ${config.servicePackage}.${upperModelName}Service;
  */
 @RestController
 @RequestMapping("${lowerModelName}")
-public class ${upperModelName}Controller extends AbstractController {
+public class ${upperModelName}Controller extends BaseController {
 
     @Autowired
     ${upperModelName}Service ${lowerModelName}Service;
+    @Autowired
+    SysRoleService sysRoleService;
 
     /**
-     * 页面-查询列表
+     * GET: 页面-查询列表
      */
     @RequestMapping("/list")
-    public ModelAndView list(${upperModelName}Request ${lowerModelName}Request) {
-        ModelAndView mv = render();
-        Page<${upperModelName}Response> page = ${lowerModelName}Service.selectPage(${lowerModelName}Request);
-        mv.addObject("page", page);
-        mv.addObject("search", ${lowerModelName}Request);
-        return mv;
+    public PageResult list(${upperModelName}Request pageRequest) {
+        //只有超级管理员，才能查看所有管理员列表
+        if (!sysRoleService.isAdminRole(getUserId())) {
+            pageRequest.setCreateUser(getCreateUser());
+        }
+        return ${lowerModelName}Service.selectPage(pageRequest);
     }
 
     /**
-     * 页面-新增
+     * GET: 用户信息
      */
-    @RequestMapping("/add")
-    public ModelAndView add() {
-        return render();
+    @RequestMapping("/info/{id}")
+    public ${upperModelName} info(@PathVariable("id") Long id) {
+        return ${lowerModelName}Service.selectById(id);
     }
 
     /**
-     * 页面-编辑
+     * POST: 接口-新增
      */
-    @RequestMapping("/edit")
-    public ModelAndView edit(Long id) {
-        ModelAndView mv = render();
-        ${upperModelName} ${lowerModelName} = ${lowerModelName}Service.selectById(id);
-        mv.addObject("model", ${lowerModelName});
-        return mv;
-    }
-
-    /**
-     * 接口-新增
-     */
-    @SysLog("新增订单")
     @RequestMapping("/insert")
     @RequiresPermissions("sys:${lowerModelName}:insert")
     public boolean save(${upperModelName}Request ${lowerModelName}Request) {
@@ -73,9 +62,8 @@ public class ${upperModelName}Controller extends AbstractController {
     }
 
     /**
-     * 修改
+     * POST: 修改
      */
-    @SysLog("修改订单")
     @RequestMapping("/update")
     @RequiresPermissions("sys:${lowerModelName}:update")
     public boolean update(${upperModelName}Request ${lowerModelName}Request) {
@@ -84,9 +72,8 @@ public class ${upperModelName}Controller extends AbstractController {
     }
 
     /**
-     * 删除
+     * POST: 删除
      */
-    @SysLog("删除订单")
     @RequestMapping("/delete")
     @RequiresPermissions("sys:${lowerModelName}:delete")
     public boolean delete(long id) {
