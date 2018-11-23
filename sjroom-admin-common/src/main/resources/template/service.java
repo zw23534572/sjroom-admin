@@ -1,7 +1,7 @@
 package ${config.servicePackage};
 
 import java.util.List;
-import com.github.pagehelper.Page;
+import ${config.basePackage}.common.response.PageResult;
 import ${config.entityPackage}.${upperModelName};
 import ${config.requestEntityPackage}.${upperModelName}Request;
 import ${config.responseEntityPackage}.${upperModelName}Response;
@@ -20,7 +20,7 @@ public interface ${upperModelName}Service {
     List<${upperModelName}> selectList(${upperModelName} t);
     boolean insertOrUpdate(${upperModelName}Request ${lowerModelName}Request);
     boolean deleteById(Long id);
-    Page<${upperModelName}Response> selectPage(${upperModelName}Request ${lowerModelName}Request);
+    PageResult<${upperModelName}Response> selectPage(${upperModelName}Request ${lowerModelName}Request);
 <% for(var item in dbTableFieldInfoList) { %>
     <% if(strutil.startWith(item.comment,"@yn")) { %>
     /** @yn 注解生成 */

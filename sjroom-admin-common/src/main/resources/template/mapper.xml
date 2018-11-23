@@ -11,7 +11,7 @@
             parameterType="${config.requestEntityPackage}.${upperModelName}Request">
         select
         <include refid="Base_Column_List" />
-        from ${tableName}
+        from ${dbTableName}
         <where>
         <% for(var item in dbTableFieldInfoList) {
             var isIgore=false;

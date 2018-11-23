@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <title>demo</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+</head>
+
+<body>
+<div id="rrapp">
+    <!--负债列表-->
+    <fieldset>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <td><b>负债类型</b></td>
+                <td>贷款额度</td>
+                <td>贷款时间</td>
+                <td>结束时间</td>
+                <td>操作</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="item,i in model">
+                <td>
+                    <select class="form-control" v-model="model[i].type">
+                        <option v-for="item in typeList" :value="item.value">{{ item.text }}</option>
+                    </select>
+                </td>
+                <td><input type="number" class="form-control" v-model="model[i].loanAmount" style="width: 100px"></td>
+                <td>
+                    <input type="text" class="form-control" readonly v-model="model[i].loanTime"
+                           placeholder="1901-01-01" style="width: 100px"
+                           v-on:click="datePicker($event,i,'loanTime')"/>
+                </td>
+                <td>
+                    <input type="text" class="form-control" readonly v-model="model[i].loanEndTime"
+                           placeholder="1901-01-01" style="width: 100px"
+                           v-on:click="datePicker($event,i,'loanEndTime')"/>
+                </td>
+                <td>
+                    <button @click="del(i)" class="btn btn-danger btn-sm">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+
+
+    <div align="center"><br/>
+
+        <input type="button" class="btn btn-primary" @click="add()" value="添加"></input>
+        <input type="button" class="btn btn-primary" @click="saveOrUpdate()" value="确定"></input>
+        <input type="button" class="btn btn-primary" @click="back()" value="返回" style=""></input>
+    </div>
+</div>
+<script src="../libs/jquery.min.js"></script>
+<script src="../plugins/layer/layer.js"></script>
+<script src="../libs/vue.min.js"></script>
+<script src="../js/common.js"></script>
+<script src="../plugins/My97DatePicker/WdatePicker.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#rrapp',
+        data: {
+            model: [
+                // {'type': 1, 'loanAmount': 0, 'loanTime': '2018-01-01', 'loanEndTime': '2018-01-01'},
+                // {'type': 3, 'loanAmount': 0, 'loanTime': '2018-01-01', 'loanEndTime': '2018-01-01'},
+            ],
+            // 负债类型 1：房贷 2：车贷 3：银行信用贷 4:金融信用贷 5：小额信用贷 6：网络信用贷 7：民间 8：亲友 9：信用卡',
+            typeList: [
+                {'value': 1, 'text': "房贷"},
+                {'value': 2, 'text': "车贷"},
+                {'value': 3, 'text': "银行信用贷"},
+                {'value': 4, 'text': "金融信用贷"},
+                {'value': 5, 'text': "小额信用贷"},
+                {'value': 6, 'text': "网络信用贷"},
+                {'value': 7, 'text': "民间"},
+                {'value': 8, 'text': "亲友"},
+                {'value': 9, 'text': "信用卡"},
+            ],
+            itemArr: [
+                "vehicleLoanCount",
+                "vehicleLoanTotalAmount",
+                "vehicleLoanbalance",
+                "bankCreditLoanCount",
+                "bankCreditLoanTotalAmount",
+                "bankCreditLoanbalance",
+                "bankCreditLoanCount",
+                "bankCreditLoanTotalAmount",
+                "bankCreditLoanbalance",
+                "financialLoanCount",
+                "financialLoanTotalAmount",
+                "financialLoanbalance ",
+                "smallCreditLoanCount",
+                "smallCreditLoanTotalAmount",
+                "smallCreditLoanbalance ",
+                "networkLoanCount",
+                "networkLoanTotalAmount",
+                "networkLoanbalance",
+                "privateLendingLoanCount",
+                "privateLendingLoanTotalAmount",
+                "privateLendingLoanbalance",
+                "friendsLoanCount",
+                "friendsLoanTotalAmount",
+                "friendsLoanbalance ",
+                "creditCardLoanCount",
+                "creditCardLoanTotalAmount",
+                "creditCardLoanbalance",
+            ],
+            auditId: null,
+            customerId: null
+        },
+        methods: {
+            saveOrUpdate: function () {
+                $.each(this.model, function (index, item) {
+                    item["auditId"] = vm.auditId;
+                    item["customerId"] = vm.customerId;
+                })
+                vm.ajaxPost("liabilityAudit/updateBatch");
+            },
+            back: function () {
+                layer_close();
+            },
+            del: function (index) {
+                var id = this.model[index].id;
+                this.model.splice(index, 1);
+                if (id == null) return;
+                $.getJSON(baseURL + "liabilityAudit/delete?id=" + id, function (r) {
+                    if (r.success) {
+                        // vm.model = r.data.data;
+                    }
+                });
+
+            },
+            add: function () {
+                //插入到people中
+                var newItem = {'type': 1, 'loanAmount': 0, 'loanTime': '2018-01-01', 'loanEndTime': '2018-01-01'};
+                this.model.push(newItem);
+            },
+            datePicker: function (elementId, i, name) {
+                var jqueryObject = $(elementId.currentTarget);
+                var vueObj = this;
+                WdatePicker({
+                    el: jqueryObject.get(0),
+                    dateFmt: 'yyyy-MM-dd',//日期格式，可以只显示年或年月，也可以额外显示时间
+                    onpicked: function () {
+                        vueObj.model[i][name] = jqueryObject.val();
+                    },
+                    oncleared: function () {
+                        vueObj.model[i][name] = null;
+                    },
+                    isShowClear: true,
+                    readOnly: true
+                });
+            },
+            ajaxPost: function (url) {
+                $.ajax({
+                    type: "POST",
+                    url: baseURL + url,
+                    contentType: "application/json",
+                    data: JSON.stringify(vm.model),
+                    success: function (r) {
+                        if (r.success) {
+                            alert('操作成功', function () {
+                                // parent.vm.getAuditForArr(vm.auditId,vm.itemArr);
+                                parent.vm.getAuditForArr(vm.auditId, vm.itemArr);
+                                layer_close();
+                            });
+                        } else {
+                            alert(r.msg);
+                        }
+                    }
+                });
+            },
+            query: function (id) {
+                $.getJSON(baseURL + "liabilityAudit/list?auditId=" + id, function (r) {
+                    if (r.success) {
+                        vm.model = r.data.data;
+                    }
+                });
+            },
+        },
+        created: function () {
+            var request = get_request();
+            if (request['auditId'] != null) {
+                this.auditId = request['auditId'];
+                this.query(request['auditId']);
+            }
+
+            if (request['customerId'] != null) {
+                this.customerId = request['customerId'];
+            }
+        },
+    });
+
+    /**解析url参数 **/
+    function get_request() {
+        var url = location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);
+            }
+        }
+        return theRequest;
+    }
+
+</script>
+</body>
+</html>

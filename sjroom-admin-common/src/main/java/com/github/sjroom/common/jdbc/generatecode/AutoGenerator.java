@@ -241,6 +241,7 @@ public class AutoGenerator {
         List<DbTableFieldInfo> dbTableFieldInfoList = getEntityList(tableName, dbTableInfo);
         data.put("dbTableFieldInfoList", dbTableFieldInfoList);
 
+        data.put("dbTableName", tableName);
         tableName = tableName.replace(config.getPrefixTableName(),"");
         data.put("tableName", tableName);
         data.put("date", new SimpleDateFormat("yyyy-MM-dd HH:ss").format(new java.util.Date()));

@@ -16,7 +16,7 @@ import java.util.Date;
  * @version 1.0.0.
  * @date ${date}
  */
-@TableName("${tableName}")
+@TableName("${dbTableName}")
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class ${upperModelName} implements Serializable {

@@ -12,6 +12,8 @@ import ${config.requestEntityPackage}.${upperModelName}Request;
 import ${config.responseEntityPackage}.${upperModelName}Response;
 import ${config.entityPackage}.${upperModelName};
 import ${config.servicePackage}.${upperModelName}Service;
+import ${config.basePackage}.common.response.PageResult;
+import ${config.basePackage}.common.PageResultUtils;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 
@@ -69,11 +71,11 @@ public class ${upperModelName}ServiceImpl extends AbstractService implements ${u
     }
 
     @Override
-    public Page<${upperModelName}Response> selectPage(${upperModelName}Request ${lowerModelName}Request) {
+    public PageResult<${upperModelName}Response> selectPage(${upperModelName}Request ${lowerModelName}Request) {
         logger.debug("${upperModelName}ServiceImpl selectPage:{}", ${lowerModelName}Request);
         Page<${upperModelName}Response> page = PageHelper.startPage(${lowerModelName}Request.getPageNo(), ${lowerModelName}Request.getPageSize());
         ${lowerModelName}Mapper.selectPage(${lowerModelName}Request);
-        return page;
+        return PageResultUtils.convert(page);
     }
 
 <% for(var item in dbTableFieldInfoList) {%>
