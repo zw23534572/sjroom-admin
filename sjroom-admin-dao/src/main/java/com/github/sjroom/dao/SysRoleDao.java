@@ -3,7 +3,7 @@ package com.github.sjroom.dao;
 
 import com.github.sjroom.common.request.PageRequest;
 import com.github.sjroom.domain.entity.SysRole;
-import com.github.sjroom.jdbc.core.BaseMapper;
+import com.github.sjroom.common.jdbc.core.BaseMapper;
 
 import java.util.List;
 

@@ -54,7 +54,7 @@ public class SysMenuController extends BaseController {
     @RequiresPermissions("sys:menu:list")
     public List<SysMenuResponse> list() {
         logger.info("SysMenuController list start");
-        PageResult pageResult = sysMenuService.selectPage(new PageRequest());
+        PageResult pageResult = sysMenuService.selectPage(new PageRequest(1,10000));
         logger.info("SysMenuController list start : {}", pageResult.getData());
         return pageResult.getData();
     }

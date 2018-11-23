@@ -18,7 +18,7 @@
 				order by ${orderBy} ${order}
 			</when>
 			<otherwise>
-				order by id desc
+				order by id asc
 			</otherwise>
 		</choose>
 	</select>

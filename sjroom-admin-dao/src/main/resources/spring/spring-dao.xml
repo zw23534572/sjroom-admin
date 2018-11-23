@@ -14,7 +14,7 @@
     </bean>
 
     <!--自定义配置文件 支持 basemapper的orm使用-->
-    <bean id="baseMapperConfiguration" class="com.github.sjroom.jdbc.core.MyConfiguration"/>
+    <bean id="baseMapperConfiguration" class="com.github.sjroom.common.jdbc.core.MyConfiguration"/>
 
     <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

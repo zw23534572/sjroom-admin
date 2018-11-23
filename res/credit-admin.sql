@@ -1,0 +1,17 @@
+INSERT INTO `sys_menu` VALUES ('1', '0', '系统管理', null, null, '0', 'fa fa-cog', '0');
+INSERT INTO `sys_menu` VALUES ('2', '1', '用户列表', 'modules/sys/user.html', null, '1', 'fa fa-user', '1');
+INSERT INTO `sys_menu` VALUES ('3', '1', '角色管理', 'modules/sys/role.html', null, '1', 'fa fa-user-secret', '2');
+INSERT INTO `sys_menu` VALUES ('4', '1', '菜单管理', 'modules/sys/menu.html', null, '1', 'fa fa-th-list', '3');
+INSERT INTO `sys_menu` VALUES ('5', '1', 'SQL监控', 'druid/sql.html', null, '1', 'fa fa-bug', '4');
+INSERT INTO `sys_menu` VALUES ('6', '2', '查看', null, 'sys:user:list,sys:user:info', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('7', '2', '新增', null, 'sys:user:save,sys:role:select', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('8', '2', '修改', null, 'sys:user:update,sys:role:select', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('9', '2', '删除', null, 'sys:user:delete', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('10', '3', '查看', null, 'sys:role:list,sys:role:info', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('11', '3', '新增', null, 'sys:role:save,sys:menu:list', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('12', '3', '修改', null, 'sys:role:update,sys:menu:list', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('13', '3', '删除', null, 'sys:role:delete', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('14', '4', '查看', null, 'sys:menu:list,sys:menu:info', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('15', '4', '新增', null, 'sys:menu:save,sys:menu:select', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('16', '4', '修改', null, 'sys:menu:update,sys:menu:select', '2', null, '0');
+INSERT INTO `sys_menu` VALUES ('17', '4', '删除', null, 'sys:menu:delete', '2', null, '0');

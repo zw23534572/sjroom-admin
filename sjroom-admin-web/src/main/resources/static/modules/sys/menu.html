@@ -28,12 +28,13 @@
     <script src="../../js/common.js"></script>
 </head>
 <body>
+
 <div id="rrapp" v-cloak>
     <div v-show="showList">
         <div class="grid-btn">
             <a v-if="hasPermission('sys:menu:save')" class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
             <a v-if="hasPermission('sys:menu:update')" class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
-            <a v-if="hasPermission('sys:menu:delete')" class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            <a v-if="hasPermission('sys:menu:delete')" class="btn btn-danger" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
         </div>
         <table id="menuTable" data-mobile-responsive="true" data-click-to-select="true">
             <thead>
@@ -77,7 +78,7 @@
                     <input type="text" class="form-control" v-model="menu.url" placeholder="菜单URL"/>
                 </div>
             </div>
-            <div v-if="menu.type == 1 || menu.type == 2" class="form-group">
+            <div v-if="menu.type == 2" class="form-group">
                 <div class="col-sm-2 control-label">授权标识</div>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" v-model="menu.perms" placeholder="多个用逗号分隔，如：user:list,user:create"/>
@@ -89,7 +90,7 @@
                     <input type="number" class="form-control" v-model="menu.orderNum" placeholder="排序号"/>
                 </div>
             </div>
-            <div v-if="menu.type != 2" class="form-group">
+            <div v-if="menu.type == 0" class="form-group">
                 <div class="col-sm-2 control-label">图标</div>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" v-model="menu.icon" placeholder="菜单图标"/>
@@ -99,7 +100,7 @@
             <div class="form-group">
                 <div class="col-sm-2 control-label"></div>
                 <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
-                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="goback" value="返回"/>
             </div>
         </form>
     </div>

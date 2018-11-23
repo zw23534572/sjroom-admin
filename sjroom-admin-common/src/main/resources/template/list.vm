@@ -1,0 +1,88 @@
+#include("/layout/header.vm")
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">交易管理</a></li>
+        <li><a href="javascript:void(0);">${title}</a></li>
+    </ul>
+</div>
+
+<div class="formbody">
+    <div id="usual1" class="usual">
+        <form id="searchForm" action="/sys/traderOrder/list" method="post">
+            <input id="page" type="hidden" name="pageNo" value="1"/>
+            <ul class="seachform1" style="width:100%;height: auto;">
+                <li>
+                    <label>开始日期</label>
+                    <input type="text" class="scinput" style="width: 183px" name="startDate" placeholder="填写筛选日期"
+                           onfocus="WdatePicker({minDate:'{%y-100}-%M-{%d+1}'})"
+                           value="$dateUtils.formatYYYYMMDD($request.startDate)">
+                </li>
+                <li>
+                    <label>结束日期</label>
+                    <input type="text" class="scinput" style="width: 183px" name="endDate" placeholder="填写筛选日期"
+                           onfocus="WdatePicker({minDate:'{%y-100}-%M-{%d+1}'})"
+                           value="$dateUtils.formatYYYYMMDD($request.endDate)">
+                </li>
+                <li>
+                    <label>订单名称</label>
+                    <input name="orderName" id="orderName" value="$!request.orderName" type="text" class="scinput1" style="width:200px;"/>
+                </li>
+                <li>
+                    <label>订单状态</label>
+                    <div class="vocation">
+                        <div class="vocation">
+                            <select name="status" id="status" required class="select3" style="width: 80px;">
+                                <option #if ($request.status.equals(-1)) selected  #end value="-1">全部</option>
+                                <option #if ($request.status.equals(0)) selected  #end value="0">创建中</option>
+                                <option #if ($request.status.equals(1)) selected  #end value="1">创建成功</option>
+                                <option #if ($request.status.equals(2)) selected  #end value="2">创建失败</option>
+                            </select>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <input type="submit" class="scbtn" value="查询"/>
+                    <input type="button" class="scbtn" value="新增"/>
+                </li>
+                <li style="clear: both;float: none;height: 0;line-height: 0;display: block;"></li>
+            </ul>
+        </form>
+
+        <div class="formtitle"><span>交易列表</span></div>
+        <table class="tablelist">
+            <thead>
+            <tr align="right">
+                <th width="8%">序列号</th>
+                <th width="11%">订单号</th>
+                <th >订单名称</th>
+                <th width="10%">状态</th>
+                <th width="20%">交易时间</th>
+                <th width="10%">操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                #if ($page.getResult().isEmpty())
+                <tr><td colspan="12" align="center">暂无记录</td></tr>
+                #end
+                #foreach ($item in $page.getResult())
+                <tr class="gradeX" align="center">
+                    <td><span class="txt-overflow-120 txt-detail" data-title="${item.id}">${item.id}</span></td>
+                    <td><span class="txt-overflow-100 txt-detail" data-title="${item.orderNo}">${item.orderNo}</span></td>
+                    <td><span class="txt-overflow-100 txt-detail" data-title="${item.orderName}">${item.orderName}</span></td>
+                    <td><span class="txt-overflow-100 txt-detail" data-title="${item.statusDesc}">${item.statusDesc}</span></td>
+                    <td><span class="txt-overflow-90 txt-detail" data-title="${item.createDate}">$dateUtils.formatYYYYMMDDHHMMSS($item.createDate)</span></td>
+                    <td><div class="div-center">操作</div></td>
+                </tr>
+                #end
+            </tbody>
+        </table>
+
+        <div class="pagin">
+            #set($formId="searchForm")
+                #showPageFormSubmit2($page $formId)
+        </div>
+    </div>
+</div>
+#include("/layout/bottom.vm")

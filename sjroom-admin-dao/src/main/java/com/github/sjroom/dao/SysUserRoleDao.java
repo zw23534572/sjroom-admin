@@ -1,6 +1,6 @@
 package com.github.sjroom.dao;
 
-import com.github.sjroom.jdbc.core.BaseMapper;
+import com.github.sjroom.common.jdbc.core.BaseMapper;
 import com.github.sjroom.domain.entity.SysUserRole;
 
 import java.util.List;

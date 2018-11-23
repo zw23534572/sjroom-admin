@@ -31,7 +31,7 @@
 				order by ${orderBy} ${asc}
 			</when>
 			<otherwise>
-				order by id desc
+				order by order_num asc
 			</otherwise>
 		</choose>
 	</select>

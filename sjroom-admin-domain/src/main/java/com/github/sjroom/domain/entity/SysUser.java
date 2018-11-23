@@ -1,8 +1,8 @@
 package com.github.sjroom.domain.entity;
 
-import com.github.sjroom.jdbc.annotation.TableField;
-import com.github.sjroom.jdbc.annotation.TableId;
-import com.github.sjroom.jdbc.annotation.TableName;
+import com.github.sjroom.common.jdbc.annotation.TableField;
+import com.github.sjroom.common.jdbc.annotation.TableId;
+import com.github.sjroom.common.jdbc.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
