@@ -2,7 +2,7 @@
 <configuration status="OFF">
 
     <Properties>
-        <Property name="logDir">/export/logs</Property>
+        <Property name="logDir">/export/app/sjroom-admin/logs</Property>
         <Property name="logFileName">server</Property>
         <!-- d天 m分 s秒 保留配置的最近时间日志 -->
         <Property name="deleteLog">3d</Property>
