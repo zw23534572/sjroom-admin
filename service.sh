@@ -5,7 +5,8 @@ JAR_NAME="sjroom-admin-web"
 env=$2
 
 function service_start(){
-    java -Dserver.port=8001 -Denv=$env $JAVA_OPTS -jar "$JAR_PATH/$JAR_NAME.jar" > /dev/null 2>./error.log &
+    echo `java -Dserver.port=8001 -Denv=$env $JAVA_OPTS -jar "$JAR_PATH/$JAR_NAME/target/$JAR_NAME.jar" > /dev/null 2>./error.log &`
+    java -Dserver.port=8001 -Denv=$env $JAVA_OPTS -jar "$JAR_PATH/$JAR_NAME/target/$JAR_NAME.jar" > /dev/null 2>./error.log &
 }
 
 #function service_start(){
