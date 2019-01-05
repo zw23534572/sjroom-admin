@@ -3,6 +3,9 @@
 
 所以用直接请先按步骤安装。
 
+demo 网址
+http://sjroom-admin.sjroom.cn/login.html
+
 ### 第一步
 目前项目还未发布到中央仓库，所以需要用的话请下载代码maven install到本地仓库后在使用
 以后在自己的本项目中添加
