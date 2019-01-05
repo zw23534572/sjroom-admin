@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
-JAR_PATH="/export/App/sjroom-admin"
+JAR_PATH="/export/app/sjroom-admin"
 JAR_NAME="sjroom-admin-web"
-
+env=$2
 
 function service_start(){
-    /export/servers/jdk/bin/java  -Denv=$env\
-    $JAVA_OPTS -jar "$JAR_PATH/$JAR_NAME.jar" > /dev/null 2>./error.log &
+    java -Dserver.port=8001 -Denv=$env $JAVA_OPTS -jar "$JAR_PATH/$JAR_NAME.jar" > /dev/null 2>./error.log &
 }
 
 #function service_start(){
@@ -17,19 +16,19 @@ function service_start(){
 #}
 
 function service_stop(){
-	kill -9 `/export/servers/jdk/bin/jps |grep $JAR_NAME|awk '{print $1}'` > /dev/null 2>&1 &
+	kill -9 `jps |grep $JAR_NAME|awk '{print $1}'` > /dev/null 2>&1 &
 }
 
 case $1 in
         "start")
-                /export/servers/jdk/bin/jps |grep $JAR_NAME > /dev/null
+                jps |grep $JAR_NAME > /dev/null
                 if [ $? == 0 ];then
                     echo "$JAR_NAME is already Started"
                 fi
                 echo "service_start"
                 service_start
 		sleep 1
-                /export/servers/jdk/bin/jps |grep $JAR_NAME > /dev/null
+                jps |grep $JAR_NAME > /dev/null
                 if [ $? == 0 ];then
                     echo "$JAR_NAME is Started!"
                     exit 0
@@ -41,7 +40,7 @@ case $1 in
         "stop")
                 service_stop
                 sleep 1
-                /export/servers/jdk/bin/jps |grep $JAR_NAME > /dev/null
+                jps |grep $JAR_NAME > /dev/null
                 if [ $? == 0 ];then
                         echo "$JAR_NAME stop Fail!"
                         exit 1
@@ -53,7 +52,7 @@ case $1 in
         "restart")
                 service_stop
                 sleep 1
-                /export/servers/jdk/bin/jps |grep $JAR_NAME > /dev/null
+                jps |grep $JAR_NAME > /dev/null
                 if [ $? == 0 ];then
                         echo "$JAR_NAME stop Fail!"
                         exit 1
@@ -61,7 +60,7 @@ case $1 in
                         echo "$JAR_NAME is Stoped!"
                 fi
                 service_start
-                /export/servers/jdk/bin/jps |grep $JAR_NAME > /dev/null
+                jps |grep $JAR_NAME > /dev/null
                 if [ $? == 0 ];then
                     echo "$JAR_NAME is Started!"
                     exit 0

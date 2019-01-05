@@ -14,6 +14,7 @@ import com.github.sjroom.domain.request.SysMenuRequest;
 import com.github.sjroom.domain.response.SysMenuResponse;
 import com.github.sjroom.service.ShiroService;
 import com.github.sjroom.service.SysMenuService;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,7 +55,9 @@ public class SysMenuController extends BaseController {
     @RequiresPermissions("sys:menu:list")
     public List<SysMenuResponse> list() {
         logger.info("SysMenuController list start");
-        PageResult pageResult = sysMenuService.selectPage(new PageRequest());
+        PageRequest pageRequest = new PageRequest();
+        pageRequest.setPageSize(10000);
+        PageResult pageResult = sysMenuService.selectPage(pageRequest);
         logger.info("SysMenuController list start : {}", pageResult.getData());
         return pageResult.getData();
     }
