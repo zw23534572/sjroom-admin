@@ -1,12 +1,14 @@
 package com.github.sjroom.controller.sys;
 
 import com.github.sjroom.base.BaseController;
+import com.github.sjroom.common.Constant;
 import com.github.sjroom.common.YNStatus;
 import com.github.sjroom.common.util.AssertUtil;
 import com.github.sjroom.common.util.TokenGeneratorUtil;
 import com.github.sjroom.dao.SysUserDao;
 import com.github.sjroom.domain.entity.SysUser;
 import com.github.sjroom.service.SysUserTokenService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,8 +76,10 @@ public class SysLoginController extends BaseController {
      */
     @RequestMapping(value = "/sys/logout", method = RequestMethod.POST)
     public int logout(HttpServletRequest request, HttpServletResponse response) {
-        String token = (String)request.getSession().getAttribute("token");
+        String token = (String) request.getSession().getAttribute("token");
         sysUserTokenService.logout(token);
+        //注销当前登录的用户信息
+        request.getSession().setAttribute(Constant.USER_INFO, null);
         return 1;
     }
 
