@@ -99,11 +99,7 @@ public class SysUserServiceImpl extends AbstractService implements SysUserServic
     public void deleteBatch(Long[] userId) {
         if (userId != null && userId.length > 0) {
             for (Long item : userId) {
-                SysUser sysUser = new SysUser();
-                sysUser.setId(item);
-                sysUser.setStatus((byte) YNStatus.NO.getCode());
-                sysUser.setYn((byte) YNStatus.NO.getCode());
-                sysUserDao.updateById(sysUser);
+                sysUserDao.deleteById(item);
             }
         }
     }
