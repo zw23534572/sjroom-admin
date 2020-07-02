@@ -1,0 +1,19 @@
+sjroom:
+  project:
+    # 不需要认证的请求
+    no-authentication:
+    - /doc.html
+    - /webjars/**
+    - /swagger-resources
+    - /v2/**
+    - /actuator
+    - /actuator/**
+    - /login
+    - /resources/**
+    - /home
+    - /**/favicon.ico
+
+spring:
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8

@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.sjroom.common.web.WebConfigurer,com.github.sjroom.common.ApplicationInfo
