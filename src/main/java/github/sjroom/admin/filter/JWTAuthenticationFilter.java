@@ -1,13 +1,12 @@
 package github.sjroom.admin.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import github.sjroom.admin.utils.JwtTokenUtils;
+import github.sjroom.admin.utils.JwtTokenUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -15,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 
 /**
  * 验证用户名密码正确后，生成一个token，并将token返回给客户端
@@ -30,7 +28,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public JWTAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        super.setFilterProcessesUrl("login");
+        super.setFilterProcessesUrl("/login");
     }
 
     @Override
@@ -56,24 +54,13 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-
         JwtUser jwtUser = (JwtUser) authResult.getPrincipal();
-        System.out.println("jwtUser:" + jwtUser.toString());
-
-        String role = "";
-        Collection<? extends GrantedAuthority> authorities = jwtUser.getAuthorities();
-        for (GrantedAuthority authority : authorities) {
-            role = authority.getAuthority();
-        }
-
-        String token = JwtTokenUtils.createToken(jwtUser.getUsername(), role);
-        // 返回创建成功的token
-        // 但是这里创建的token只是单纯的token
-        // 按照jwt的规定，最后请求的时候应该是 `Bearer token`
+        log.info("successfulAuthentication jwtUser:{}", jwtUser);
+        String token = JwtTokenUtil.generateToken(jwtUser.getUsername());
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
-        String tokenStr = JwtTokenUtils.TOKEN_PREFIX + token;
-        response.setHeader(JwtTokenUtils.TOKEN_HEADER, tokenStr);
+        response.setHeader(JwtTokenUtil.HEADER_TOKEN, token);
+        response.getWriter().write(token);
     }
 
     @Override

@@ -24,10 +24,10 @@ public class JwtUser implements UserDetails {
 
     // 写一个能直接使用user创建jwtUser的构造器
     public JwtUser(Long id, String username, String password, String role) {
-        id = id;
-        username = username;
-        password = password;
-        authorities = Collections.singleton(new SimpleGrantedAuthority(role));
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.authorities = Collections.singleton(new SimpleGrantedAuthority(role));
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {

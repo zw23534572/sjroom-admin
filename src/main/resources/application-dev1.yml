@@ -1,23 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://47.106.103.121:3306/demo?serverTimezone=UTC&useTimezone=true&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://47.106.103.121:3306/sjroom-admin?serverTimezone=UTC&useTimezone=true&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&useSSL=false&allowMultiQueries=true
     username: root
     password: '!@#sh!@#'
-  redis:
-    cluster:
-      nodes: 10.20.0.85:6379
-
-jasypt:
-  encryptor:
-    password: dop-sunvalley
-
-## rocketMq
-rocketmq:
-  name-server: 10.20.0.83:9876
-  producer.group: ${spring.application.name}
 
 logging:
   level:
-    github.sjroom: debug
-    mvc.api: debug
-    github.sjroom.feign.common.FeignServiceFacade: debug
+    root: INFO

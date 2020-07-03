@@ -1,5 +1,5 @@
 sjroom:
-  project:
+  security:
     # 不需要认证的请求
     no-authentication:
     - /doc.html
@@ -8,10 +8,10 @@ sjroom:
     - /v2/**
     - /actuator
     - /actuator/**
-    - /login
     - /resources/**
     - /home
     - /**/favicon.ico
+    - /error
 
 spring:
   messages:
