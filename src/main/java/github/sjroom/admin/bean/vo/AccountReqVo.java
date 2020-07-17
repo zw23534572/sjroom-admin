@@ -27,7 +27,6 @@ public class AccountReqVo  {
     private String email;
 
     @ApiModelProperty("登录用户名")
-	@NotBlank
     private String loginName;
 
     @ApiModelProperty("密码")

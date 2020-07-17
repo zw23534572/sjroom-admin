@@ -54,7 +54,7 @@ public class UserController {
 
     @ApiOperation("列表")
     @PostMapping("list")
-    @PreAuthorize("hasRole('ROLE_USER')")
+    @PreAuthorize("hasRole('ROLE_USER1')")
     @FillField
     public List<UserRespVo> list(@Validated @RequestBody UserReqVo reqVo) {
         return iUserServiceComp.list(reqVo);
