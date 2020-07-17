@@ -36,7 +36,7 @@ public class MyUserDetailsService implements UserDetailsService {
         user = iUserService.getOne(queryWrapper);
         if (ObjectUtil.isNotEmpty(user)) {
             JwtUser jwtUser = new JwtUser(1l, user.getUserName(), user.getPassword(), "ROLE_USER");
-            log.info("开始登陆！用户: {}  passwordEncoder:{}", JSON.toJSONString(jwtUser), passwordEncoder.encode(jwtUser.getPassword()));
+            log.info("MyUserDetailsService: {}  passwordEncoder:{}", JSON.toJSONString(jwtUser), passwordEncoder.encode(jwtUser.getPassword()));
             return jwtUser;
         }
         return null;
