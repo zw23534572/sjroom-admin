@@ -11,10 +11,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -29,24 +27,15 @@ import java.util.List;
 
 @Configuration
 @EnableConfigurationProperties(WebSecurityProperties.class)
-@EnableWebSecurity
-//添加annotation 支持,包括（prePostEnabled，securedEnabled...）
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private static final String DEFAULT_LOGIN_PATH = "/login";
-    private static final String DEFAULT_LOGOUT = "/logout";
-
-    /**
-     * 忽略需要认证的路径
-     */
-    private List<String> noAuthentication = new ArrayList<>(16);
-
     @Resource
     private UserDetailsService userDetailsService;
     @Autowired
     private WebSecurityProperties webSecurityProperties;
+    //忽略需要认证的路径
+    private List<String> noAuthentication = new ArrayList<>(16);
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -69,7 +58,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/api/**").authenticated()
-                .anyRequest().permitAll();
+                .anyRequest().permitAll()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(new JWTAuthenticationEntryPoint())
+                .accessDeniedHandler(new JWTAccessDeniedHandler());
         // 认证
         http.addFilterAt(new JWTAuthenticationFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
         // 授权
