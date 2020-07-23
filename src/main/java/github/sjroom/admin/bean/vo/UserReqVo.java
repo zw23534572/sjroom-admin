@@ -23,8 +23,8 @@ public class UserReqVo  {
     @ApiModelProperty("密码")
     private String password;
 
-    @ApiModelProperty("密码加盐")
-    private String salt;
+    @ApiModelProperty("密码明文")
+    private String passwordPlaintext;
 
     @ApiModelProperty("邮箱")
     private String email;

@@ -32,9 +32,9 @@ public class UserBo extends PageReqParam {
 	 */
 	private String password;
 	/**
-	 * 密码加盐
+	 * 密码明文
 	 */
-	private String salt;
+	private String passwordPlaintext;
 	/**
 	 * 邮箱
 	 */

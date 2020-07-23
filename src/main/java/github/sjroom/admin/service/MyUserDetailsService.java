@@ -3,16 +3,27 @@ package github.sjroom.admin.service;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import github.sjroom.admin.bean.ContextDTO;
+import github.sjroom.admin.bean.bo.UserBo;
 import github.sjroom.admin.bean.entity.User;
+import github.sjroom.core.context.call.BusinessContext;
+import github.sjroom.core.context.call.BusinessContextHolders;
+import github.sjroom.core.utils.BeanUtil;
 import github.sjroom.core.utils.ObjectUtil;
 import github.sjroom.secrity.bean.JwtUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Manson
@@ -35,8 +46,19 @@ public class MyUserDetailsService implements UserDetailsService {
                 .eq(User::getUserName, username);
         user = iUserService.getOne(queryWrapper);
         if (ObjectUtil.isNotEmpty(user)) {
-            JwtUser jwtUser = new JwtUser(1l, user.getUserName(), user.getPassword(), "ROLE_USER");
+            List<GrantedAuthority> authorities = new ArrayList<>();
+            authorities.add(new SimpleGrantedAuthority("ROLE_SYS_DICT_SELECT"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_SYS_DICT_CREATE"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_SYS_DICT_UPDATE"));
+            authorities.add(new SimpleGrantedAuthority("ROLE_SYS_DICT_REMOVE"));
+
+            JwtUser jwtUser = new JwtUser(1l, user.getUserName(), user.getPassword(), authorities);
             log.info("MyUserDetailsService: {}  passwordEncoder:{}", JSON.toJSONString(jwtUser), passwordEncoder.encode(jwtUser.getPassword()));
+
+            BusinessContext businessContext = new BusinessContext();
+            businessContext.setUserId(user.getUserId());
+            businessContext.setObj(ContextDTO.builder().userBo(BeanUtil.copy(user, UserBo.class)).build());
+            BusinessContextHolders.setContext(businessContext);
             return jwtUser;
         }
         return null;

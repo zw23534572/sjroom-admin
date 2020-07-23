@@ -45,10 +45,10 @@ public interface IUserService extends BaseService<User> {
 	/**
 	 * 列表
 	 *
-	 * @param userBo 业务model
+	 * @param bIds 业务model
 	 * @return 键值对
 	 */
-	Map<Long, UserBo> findMap(UserBo userBo);
+	Map<Long, String> fillFieldName(Set<Long> bIds);
 
 	/**
 	 * 分页
