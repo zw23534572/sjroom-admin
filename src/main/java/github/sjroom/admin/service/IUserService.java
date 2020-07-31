@@ -14,7 +14,7 @@ import java.util.Set;
  *
  * @author manson.zhou
  * @version 1.0.0.
- * @date 2020-07-02 16:44
+ * @date 2020-07-24 11:51
  */
 public interface IUserService extends BaseService<User> {
 
@@ -45,10 +45,10 @@ public interface IUserService extends BaseService<User> {
 	/**
 	 * 列表
 	 *
-	 * @param bIds 业务model
+	 * @param userBo 业务model
 	 * @return 键值对
 	 */
-	Map<Long, String> fillFieldName(Set<Long> bIds);
+	Map<Long, UserBo> findMap(UserBo userBo);
 
 	/**
 	 * 分页
@@ -57,4 +57,12 @@ public interface IUserService extends BaseService<User> {
 	 * @return
 	 */
 	IPage<UserBo> findPage(UserBo userBo);
+
+	/**
+	 * 注解：@fillFieldName，填充字段的专用方法
+	 *
+	 * @param bIds 业务model
+	 * @return 键值对
+	 */
+	Map<Long, String> fillFieldName(Set<Long> bIds);
 }

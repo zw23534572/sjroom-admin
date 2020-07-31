@@ -42,8 +42,7 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = new User();
         user.setUserName(username);
-        Wrapper<User> queryWrapper = new LambdaQueryWrapper<User>()
-                .eq(User::getUserName, username);
+        Wrapper<User> queryWrapper = new LambdaQueryWrapper<User>().eq(User::getUserName, username);
         user = iUserService.getOne(queryWrapper);
         if (ObjectUtil.isNotEmpty(user)) {
             List<GrantedAuthority> authorities = new ArrayList<>();
@@ -52,12 +51,15 @@ public class MyUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_SYS_DICT_UPDATE"));
             authorities.add(new SimpleGrantedAuthority("ROLE_SYS_DICT_REMOVE"));
 
-            JwtUser jwtUser = new JwtUser(1l, user.getUserName(), user.getPassword(), authorities);
+            JwtUser jwtUser = new JwtUser(user.getUserId(), user.getUserName(), user.getPassword(), authorities);
             log.info("MyUserDetailsService: {}  passwordEncoder:{}", JSON.toJSONString(jwtUser), passwordEncoder.encode(jwtUser.getPassword()));
-
+            ContextDTO contextDTO = ContextDTO.builder()
+                    .userBo(BeanUtil.copy(user, UserBo.class))
+                    .jwtUser(jwtUser)
+                    .build();
             BusinessContext businessContext = new BusinessContext();
             businessContext.setUserId(user.getUserId());
-            businessContext.setObj(ContextDTO.builder().userBo(BeanUtil.copy(user, UserBo.class)).build());
+            businessContext.setObj(contextDTO);
             BusinessContextHolders.setContext(businessContext);
             return jwtUser;
         }

@@ -6,11 +6,11 @@ import github.sjroom.core.mybatis.page.PageReqParam;
 import lombok.EqualsAndHashCode;
 
 /**
- * <B>说明：</B><BR>
+ * <B>说明：用户信息</B><BR>
  *
  * @author manson.zhou
  * @version 1.0.0.
- * @date 2020-07-02 16:44
+ * @date 2020-07-24 11:51
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -44,6 +44,14 @@ public class UserBo extends PageReqParam {
 	 */
 	private String mobile;
 	/**
+	 * 用户类型： 0:普通用户，1:管理员
+	 */
+	private Integer type;
+	/**
+	 * 0:禁用,1:正常
+	 */
+	private Integer status;
+	/**
 	 * 创建时间
 	 */
 	private Date createdAt;
@@ -59,8 +67,4 @@ public class UserBo extends PageReqParam {
 	 * 更新人
 	 */
 	private String updatedBy;
-	/**
-	 * 0:禁用,1:正常
-	 */
-	private Integer status;
 }

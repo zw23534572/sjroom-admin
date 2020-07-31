@@ -7,7 +7,7 @@ import github.sjroom.admin.bean.vo.UserRespVo;
 import github.sjroom.web.vo.IdStatusListVo;
 import github.sjroom.web.vo.IdVo;
 import org.springframework.validation.annotation.Validated;
-
+import github.sjroom.web.vo.IdListVo;
 import java.util.List;
 
 /**
@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author manson.zhou
  * @version 1.0.0.
- * @date 2020-07-02 16:44
+ * @date 2020-07-24 11:51
  */
 @Validated
 public interface IUserServiceComp {
@@ -48,4 +48,9 @@ public interface IUserServiceComp {
 	 * 批量更新
 	 */
 	void updateBatch(IdStatusListVo<Long, Integer> idStatusListVo);
+
+	/**
+	 * 批量移除
+	 */
+	void removeBatch(IdListVo<Long> idListVo);
 }

@@ -8,11 +8,11 @@ import lombok.EqualsAndHashCode;
 import java.util.Date;
 
 /**
- * <B>说明：</B><BR>
+ * <B>说明：用户信息</B><BR>
  *
  * @author manson.zhou
  * @version 1.0.0.
- * @date 2020-07-02 16:44
+ * @date 2020-07-24 11:51
  */
 @TableName("sys_user")
 @Data
@@ -44,6 +44,10 @@ public class User extends BaseEntity {
      * 手机号码
      */
     private String mobile;
+    /**
+     * 用户类型： 0:普通用户，1:管理员
+     */
+    private Integer type;
     /**
      * 0:禁用,1:正常
      */

@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * <B>说明：</B><BR>
+ * <B>说明：用户信息</B><BR>
  *
  * @author manson.zhou
  * @version 1.0.0.
- * @date 2020-07-02 16:44
+ * @date 2020-07-24 11:51
  */
 @Service
 @Slf4j
