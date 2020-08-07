@@ -51,7 +51,7 @@ public class GenerateCode {
         // 包名
         configGenerator.setBasePackage("github.sjroom.admin");
         // 需要生成的表,多个为 "sys_msg_info,sys_msg_info12,sys_msg_info33"
-        configGenerator.setGenerateTableName("sys_menu");
+        configGenerator.setGenerateTableName("sys_role_menu");
         // 替换表名前缀
         configGenerator.setPrefixTableName("sys");
         new AutoGenerator(configGenerator).run();

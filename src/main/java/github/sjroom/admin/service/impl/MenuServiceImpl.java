@@ -37,63 +37,71 @@ import java.util.stream.Collectors;
 @Validated
 public class MenuServiceImpl extends BaseServiceImpl<IMenuDao, Menu> implements IMenuService {
 
-	@Override
-	public MenuBo findByBId(Long bid) {
-		Menu menu = super.getByBId(bid);
-		return BeanUtil.copy(menu, MenuBo.class);
-	}
+    @Override
+    public MenuBo findByBId(Long bid) {
+        Menu menu = super.getByBId(bid);
+        return BeanUtil.copy(menu, MenuBo.class);
+    }
 
-	@Override
-	public List<MenuBo> findByBIds(Set<Long> menuIds) {
-		List<Menu> menus = super.getBatchBIds(menuIds);
-		return BeanUtil.copy(menus, MenuBo.class);
-	}
+    @Override
+    public List<MenuBo> findByBIds(Set<Long> menuIds) {
+        List<Menu> menus = super.getBatchBIds(menuIds);
+        return BeanUtil.copy(menus, MenuBo.class);
+    }
 
-	@Override
-	public List<MenuBo> findList(MenuBo menuBo) {
-		List<Menu> menus = super.list(this.query(menuBo));
-		return BeanUtil.copy(menus, MenuBo.class);
-	}
+    @Override
+    public List<MenuBo> findByParentIds(Set<Long> menuParentIds) {
+        MenuBo menuBo = new MenuBo();
+        menuBo.setParentIds(menuParentIds);
+        return this.findList(menuBo);
+    }
 
-	@Override
-	public Map<Long, MenuBo> findMap(MenuBo menuBo) {
-		List<MenuBo> menuBos = this.findList(menuBo);
-		if (CollectionUtil.isEmpty(menuBos)) {
-			log.warn("MenuServiceImpl find menuBos is empty");
-			return Collections.emptyMap();
-		}
-		return menuBos.stream().collect(Collectors.toMap(MenuBo::getMenuId, Function.identity()));
-	}
+    @Override
+    public List<MenuBo> findList(MenuBo menuBo) {
+        List<Menu> menus = super.list(this.query(menuBo));
+        return BeanUtil.copy(menus, MenuBo.class);
+    }
 
-	@Override
-	public IPage<MenuBo> findPage(MenuBo model) {
-		IPage<Menu> modelPage = super.page(PageUtil.toPage(model), this.query(model));
-		return PageUtil.toPage(modelPage, MenuBo.class);
-	}
+    @Override
+    public Map<Long, MenuBo> findMap(MenuBo menuBo) {
+        List<MenuBo> menuBos = this.findList(menuBo);
+        if (CollectionUtil.isEmpty(menuBos)) {
+            log.warn("MenuServiceImpl find menuBos is empty");
+            return Collections.emptyMap();
+        }
+        return menuBos.stream().collect(Collectors.toMap(MenuBo::getMenuId, Function.identity()));
+    }
 
-	@Override
-	public Map<Long, String> fillFieldName(Set<Long> bIds) {
-		List<MenuBo> menuBos = this.findByBIds(bIds);
-		if (CollectionUtil.isEmpty(menuBos)) {
-			log.warn("MenuServiceImpl find menuBos is empty");
-			return Collections.emptyMap();
-		}
-		return menuBos.stream().collect(Collectors.toMap(MenuBo::getMenuId, MenuBo::getMenuName));
-	}
-	
-	private LambdaQueryWrapper<Menu> query(MenuBo model) {
-	    LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<Menu>();
-			wrapper.eq(ObjectUtil.isNotNull(model.getMenuId()), Menu::getMenuId, model.getMenuId());
-			wrapper.eq(ObjectUtil.isNotNull(model.getParentId()), Menu::getParentId, model.getParentId());
-			wrapper.eq(StringUtil.isNotBlank(model.getMenuName()), Menu::getMenuName, model.getMenuName());
-			wrapper.eq(StringUtil.isNotBlank(model.getMenuCode()), Menu::getMenuCode, model.getMenuCode());
-			wrapper.eq(StringUtil.isNotBlank(model.getUrl()), Menu::getUrl, model.getUrl());
-			wrapper.eq(StringUtil.isNotBlank(model.getPerms()), Menu::getPerms, model.getPerms());
-			wrapper.eq(ObjectUtil.isNotNull(model.getType()), Menu::getType, model.getType());
-			wrapper.eq(StringUtil.isNotBlank(model.getIcon()), Menu::getIcon, model.getIcon());
-			wrapper.eq(ObjectUtil.isNotNull(model.getOrderNum()), Menu::getOrderNum, model.getOrderNum());
-			wrapper.eq(ObjectUtil.isNotNull(model.getStatus()), Menu::getStatus, model.getStatus());
-		return wrapper;
-	}
+    @Override
+    public IPage<MenuBo> findPage(MenuBo model) {
+        IPage<Menu> modelPage = super.page(PageUtil.toPage(model), this.query(model));
+        return PageUtil.toPage(modelPage, MenuBo.class);
+    }
+
+    @Override
+    public Map<Long, String> fillFieldName(Set<Long> bIds) {
+        List<MenuBo> menuBos = this.findByBIds(bIds);
+        if (CollectionUtil.isEmpty(menuBos)) {
+            log.warn("MenuServiceImpl find menuBos is empty");
+            return Collections.emptyMap();
+        }
+        return menuBos.stream().collect(Collectors.toMap(MenuBo::getMenuId, MenuBo::getMenuName));
+    }
+
+    private LambdaQueryWrapper<Menu> query(MenuBo model) {
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<Menu>();
+        wrapper.eq(ObjectUtil.isNotNull(model.getMenuId()), Menu::getMenuId, model.getMenuId());
+        wrapper.eq(ObjectUtil.isNotNull(model.getParentId()), Menu::getParentId, model.getParentId());
+        wrapper.in(CollectionUtil.isNotEmpty(model.getParentIds()), Menu::getParentId, model.getParentIds());
+        wrapper.eq(StringUtil.isNotBlank(model.getMenuName()), Menu::getMenuName, model.getMenuName());
+        wrapper.eq(StringUtil.isNotBlank(model.getMenuCode()), Menu::getMenuCode, model.getMenuCode());
+        wrapper.eq(StringUtil.isNotBlank(model.getUrl()), Menu::getUrl, model.getUrl());
+        wrapper.eq(StringUtil.isNotBlank(model.getPerms()), Menu::getPerms, model.getPerms());
+        wrapper.eq(ObjectUtil.isNotNull(model.getType()), Menu::getType, model.getType());
+        wrapper.eq(StringUtil.isNotBlank(model.getIcon()), Menu::getIcon, model.getIcon());
+        wrapper.eq(ObjectUtil.isNotNull(model.getOrderNum()), Menu::getOrderNum, model.getOrderNum());
+        wrapper.eq(ObjectUtil.isNotNull(model.getStatus()), Menu::getStatus, model.getStatus());
+        return wrapper;
+    }
 
 }

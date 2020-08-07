@@ -1,18 +1,16 @@
 package github.sjroom.admin.controller;
 
 import github.sjroom.admin.service.ILoginService;
-import github.sjroom.admin.service.IUserServiceComp;
 import github.sjroom.core.response.RespVo;
-import github.sjroom.secrity.bean.UserReqVo;
+import github.sjroom.secrity.bean.JwtUserVo;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <B>说明： 控制器</B><BR>
@@ -30,23 +28,14 @@ public class LoginController {
     @Autowired
     private ILoginService iLoginService;
 
-    /**
-     * 登陆
-     *
-     * @param reqVo
-     * @return
-     */
     @PostMapping("/login")
-    public RespVo login(@RequestBody UserReqVo reqVo) throws Exception {
+    @ApiOperation(value = "登陆")
+    public RespVo login(@RequestBody JwtUserVo reqVo) throws Exception {
         return iLoginService.login(reqVo);
     }
 
-    /**
-     * 注销
-     *
-     * @return
-     */
     @PostMapping("/logout")
+    @ApiOperation(value = "注销")
     public void logout() throws Exception {
        
     }

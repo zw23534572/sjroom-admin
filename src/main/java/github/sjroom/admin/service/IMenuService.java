@@ -37,6 +37,14 @@ public interface IMenuService extends BaseService<Menu> {
 	/**
 	 * 列表
 	 *
+	 * @param menuParentIds 菜单父级ID
+	 * @return
+	 */
+	List<MenuBo> findByParentIds(Set<Long> menuParentIds);
+
+	/**
+	 * 列表
+	 *
 	 * @param menuBo 业务model
 	 * @return
 	 */

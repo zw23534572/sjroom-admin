@@ -1,9 +1,8 @@
 package github.sjroom.admin.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import github.sjroom.admin.bean.vo.UserRolePageReqVo;
-import github.sjroom.admin.bean.vo.UserRoleReqVo;
-import github.sjroom.admin.bean.vo.UserRoleRespVo;
+import github.sjroom.admin.bean.vo.RoleMenuReqVo;
+import github.sjroom.admin.bean.vo.RoleMenuRespVo;
 import github.sjroom.web.vo.IdStatusListVo;
 import github.sjroom.web.vo.IdVo;
 import org.springframework.validation.annotation.Validated;
@@ -15,34 +14,29 @@ import java.util.List;
  *
  * @author manson.zhou
  * @version 1.0.0.
- * @date 2020-08-03 14:22
+ * @date 2020-08-04 20:44
  */
 @Validated
-public interface IUserRoleServiceComp {
+public interface IRoleMenuServiceComp {
 	/**
 	 * 查看
 	 */
-	UserRoleRespVo find(IdVo<Long> idVo);
-
-	/**
-	 * 分页
-	 */
-	IPage page(UserRolePageReqVo reqVo);
+	RoleMenuRespVo find(IdVo<Long> idVo);
 
 	/**
 	 * 列表
 	 */
-	List<UserRoleRespVo> list(UserRoleReqVo reqVo);
+	List<RoleMenuRespVo> list(RoleMenuReqVo reqVo);
 
 	/**
 	 * 创建
 	 */
-	Long create(UserRoleReqVo accountReqVo);
+	Long create(RoleMenuReqVo accountReqVo);
 
 	/**
 	 * 更新
 	 */
-	void update(UserRoleReqVo accountReqVo);
+	void update(RoleMenuReqVo accountReqVo);
 
 	/**
 	 * 批量更新

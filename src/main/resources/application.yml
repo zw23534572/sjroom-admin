@@ -19,3 +19,11 @@ spring:
     encoding: UTF-8
   resources:
     static-locations: classpath:/static/
+
+logging:
+  level:
+    root: DEBUG
+
+management:
+  security:
+    enabled: false

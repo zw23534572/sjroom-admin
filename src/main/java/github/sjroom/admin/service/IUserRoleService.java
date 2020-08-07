@@ -1,5 +1,7 @@
 package github.sjroom.admin.service;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import github.sjroom.admin.bean.bo.UserRoleBo;
 import github.sjroom.admin.bean.entity.UserRole;
@@ -14,7 +16,7 @@ import java.util.Set;
  *
  * @author manson.zhou
  * @version 1.0.0.
- * @date 2020-07-24 11:10
+ * @date 2020-08-03 14:22
  */
 public interface IUserRoleService extends BaseService<UserRole> {
 
@@ -33,6 +35,14 @@ public interface IUserRoleService extends BaseService<UserRole> {
 	 * @return
 	 */
 	List<UserRoleBo> findByBIds(Set<Long> userRoleIds);
+
+	/**
+	 * 列表
+	 *
+	 * @param userIds 用户ID集合
+	 * @return
+	 */
+	List<UserRoleBo> findByUserIds(Set<Long> userIds);
 
 	/**
 	 * 列表
@@ -58,11 +68,4 @@ public interface IUserRoleService extends BaseService<UserRole> {
 	 */
 	IPage<UserRoleBo> findPage(UserRoleBo userRoleBo);
 
-	/**
-	 * 注解：@fillFieldName，填充字段的专用方法
-	 *
-	 * @param bIds 业务model
-	 * @return 键值对
-	 */
-	Map<Long, String> fillFieldName(Set<Long> bIds);
 }

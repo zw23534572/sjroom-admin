@@ -10,10 +10,14 @@ import io.swagger.annotations.ApiModelProperty;
  *
  * @author manson.zhou
  * @version 1.0.0.
- * @date 2020-07-24 11:10
+ * @date 2020-08-03 14:22
  */
 @Data
 public class UserRoleReqVo  {
+
+    @ApiModelProperty("代理主键")
+	@NotNull
+    private Long userRoleId;
 
     @ApiModelProperty("用户ID")
 	@NotNull

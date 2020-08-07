@@ -1,5 +1,6 @@
 package github.sjroom.admin.controller;
 
+import github.sjroom.admin.bean.vo.RoleMenuReqVo;
 import github.sjroom.admin.bean.vo.RolePageReqVo;
 import github.sjroom.admin.bean.vo.RoleReqVo;
 import github.sjroom.admin.bean.vo.RoleRespVo;
@@ -85,5 +86,12 @@ public class RoleController {
 	@PreAuthorize("hasRole('ROLE_SYS_ROLE_REMOVE')")
 	public void removeUpdate(@Validated @RequestBody IdListVo<Long> idListVo) {
 		iRoleServiceComp.removeBatch(idListVo);
+	}
+
+	@ApiOperation("绑定菜单")
+	@PostMapping("bind/menu")
+	@PreAuthorize("hasRole('ROLE_BIND_MENU')")
+	public void bindMenu(@Validated @RequestBody RoleMenuReqVo reqVo) {
+		iRoleServiceComp.bindMenu(reqVo);
 	}
 }

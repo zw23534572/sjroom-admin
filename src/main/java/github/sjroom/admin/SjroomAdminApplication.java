@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 @Slf4j
 @ComponentScan(basePackages = {"github.sjroom"})
 public class SjroomAdminApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(SjroomAdminApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(SjroomAdminApplication.class, args);
+    }
 }

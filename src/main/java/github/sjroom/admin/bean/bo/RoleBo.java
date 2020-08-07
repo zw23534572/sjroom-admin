@@ -1,7 +1,11 @@
 package github.sjroom.admin.bean.bo;
 
+import github.sjroom.admin.bean.vo.MenuReqVo;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import java.util.Date;
+import java.util.List;
+
 import github.sjroom.core.mybatis.page.PageReqParam;
 import lombok.EqualsAndHashCode;
 
@@ -51,4 +55,7 @@ public class RoleBo extends PageReqParam {
 	 * 更新时间
 	 */
 	private Date updatedAt;
+
+	@ApiModelProperty("菜单集合列表")
+	private List<MenuBo> menus;
 }

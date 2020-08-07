@@ -15,10 +15,6 @@ import io.swagger.annotations.ApiModelProperty;
 @Data
 public class RoleReqVo  {
 
-    @ApiModelProperty("代理主键")
-	@NotNull
-    private Long roleId;
-
     @ApiModelProperty("角色名称")
     private String roleName;
 
