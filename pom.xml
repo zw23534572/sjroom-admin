@@ -11,13 +11,11 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sjroom-admin</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>sjroom-admin-launcher</module>
+    </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>github.sjroom</groupId>
-            <artifactId>sjroom-secrity</artifactId>
-        </dependency>
-    </dependencies>
     <build>
         <!-- 设置打包生成的 jar 名称为父工程 -->
         <finalName>${artifactId}</finalName>
