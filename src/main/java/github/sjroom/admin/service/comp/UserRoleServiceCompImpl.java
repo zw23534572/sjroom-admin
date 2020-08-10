@@ -81,7 +81,6 @@ public class UserRoleServiceCompImpl implements IUserRoleServiceComp {
 			return;
 		}
 		userRoles.stream().forEach(userRole -> {
-			userRole.setStatus(idStatusListVo.getStatus());
 			userRole.setUpdatedAt(new Date());
 		});
 		userRoleService.updateBatchByBIds(userRoles);

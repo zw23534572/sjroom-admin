@@ -92,7 +92,6 @@ public class RoleMenuServiceImpl extends BaseServiceImpl<IRoleMenuDao, RoleMenu>
         wrapper.in(CollectionUtil.isNotEmpty(model.getRoleIds()), RoleMenu::getRoleId, model.getRoleIds());
         wrapper.in(CollectionUtil.isNotEmpty(model.getMenuIds()), RoleMenu::getMenuId, model.getMenuIds());
         wrapper.eq(ObjectUtil.isNotNull(model.getMenuId()), RoleMenu::getMenuId, model.getMenuId());
-        wrapper.eq(ObjectUtil.isNotNull(model.getStatus()), RoleMenu::getStatus, model.getStatus());
         return wrapper;
     }
 

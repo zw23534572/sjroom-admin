@@ -32,8 +32,4 @@ public class UserRole extends BaseEntity {
      * 角色ID
      */
     private Long roleId;
-    /**
-     * 状态1:启用,2.禁用
-     */
-    private Integer status;
 }

@@ -98,6 +98,7 @@ public class MenuServiceImpl extends BaseServiceImpl<IMenuDao, Menu> implements 
         wrapper.eq(StringUtil.isNotBlank(model.getUrl()), Menu::getUrl, model.getUrl());
         wrapper.eq(StringUtil.isNotBlank(model.getPerms()), Menu::getPerms, model.getPerms());
         wrapper.eq(ObjectUtil.isNotNull(model.getType()), Menu::getType, model.getType());
+        wrapper.in(CollectionUtil.isNotEmpty(model.getTypes()), Menu::getType, model.getTypes());
         wrapper.eq(StringUtil.isNotBlank(model.getIcon()), Menu::getIcon, model.getIcon());
         wrapper.eq(ObjectUtil.isNotNull(model.getOrderNum()), Menu::getOrderNum, model.getOrderNum());
         wrapper.eq(ObjectUtil.isNotNull(model.getStatus()), Menu::getStatus, model.getStatus());

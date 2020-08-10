@@ -84,7 +84,6 @@ public class UserRoleServiceImpl extends BaseServiceImpl<IUserRoleDao, UserRole>
         wrapper.eq(ObjectUtil.isNotNull(model.getUserRoleId()), UserRole::getUserRoleId, model.getUserRoleId());
         wrapper.eq(ObjectUtil.isNotNull(model.getUserId()), UserRole::getUserId, model.getUserId());
         wrapper.eq(ObjectUtil.isNotNull(model.getRoleId()), UserRole::getRoleId, model.getRoleId());
-        wrapper.eq(ObjectUtil.isNotNull(model.getStatus()), UserRole::getStatus, model.getStatus());
         return wrapper;
     }
 

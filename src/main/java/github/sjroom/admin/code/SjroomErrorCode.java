@@ -9,5 +9,7 @@ import github.sjroom.core.code.BaseErrorCode;
  */
 public interface SjroomErrorCode extends BaseErrorCode {
 
-    String SYSTEM_ERROR_ADD_01 = "50001001"; //该数据已经添存在不能再次重复添加{0}
+    String MENU_DELETE_ERROR_001 = "004004001"; //只有未启用的数据，才能进行删除
+    String MENU_DELETE_ERROR_002 = "004004002"; //无法删除，角色{0}在使用.
+    String MENU_DELETE_ERROR_003 = "004004003"; //请先删除{0}子菜单或按钮
 }

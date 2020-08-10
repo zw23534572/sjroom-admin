@@ -1,15 +1,14 @@
 package github.sjroom.admin.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import github.sjroom.admin.bean.bo.MenuBo;
 import github.sjroom.admin.bean.vo.*;
 import github.sjroom.web.vo.IdStatusListVo;
 import github.sjroom.web.vo.IdVo;
 import org.springframework.validation.annotation.Validated;
 import github.sjroom.web.vo.IdListVo;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * <B>说明：</B><BR>
@@ -20,6 +19,12 @@ import java.util.List;
  */
 @Validated
 public interface IMenuServiceComp {
+    /**
+     * 导航
+     * @return
+     */
+    List<MenuTreeRespVo> nav(Set<Integer> types);
+
     /**
      * 查看
      */
@@ -33,7 +38,7 @@ public interface IMenuServiceComp {
     /**
      * 列表
      */
-    List<MenuRespVo> list(MenuReqVo reqVo);
+    List<MenuRespVo> list(MenuListReqVo reqVo);
 
     /**
      * 创建

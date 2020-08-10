@@ -1,12 +1,10 @@
 package github.sjroom.admin.bean.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
-
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * <B>说明：菜单管理</B><BR>
@@ -16,18 +14,15 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2020-07-24 13:41
  */
 @Data
-public class MenuReqVo {
+public class MenuListReqVo {
 
     @ApiModelProperty("菜单ID")
-    @NotNull
     private Long menuId;
 
     @ApiModelProperty("父菜单ID，一级菜单为0")
-    @NotNull
     private Long parentId;
 
     @ApiModelProperty("菜单名称")
-    @NotBlank
     private String menuName;
 
     @ApiModelProperty("菜单URL")

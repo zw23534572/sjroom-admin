@@ -32,8 +32,4 @@ public class RoleMenu extends BaseEntity {
      * 菜单ID(sys_menu.menu_id)
      */
     private Long menuId;
-    /**
-     * 状态1:启用,2.禁用
-     */
-    private Integer status;
 }

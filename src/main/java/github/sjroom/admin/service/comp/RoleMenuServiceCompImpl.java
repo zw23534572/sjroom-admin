@@ -73,7 +73,6 @@ public class RoleMenuServiceCompImpl implements IRoleMenuServiceComp {
 			return;
 		}
 		roleMenus.stream().forEach(roleMenu -> {
-			roleMenu.setStatus(idStatusListVo.getStatus());
 			roleMenu.setUpdatedAt(new Date());
 		});
 		roleMenuService.updateBatchByBIds(roleMenus);

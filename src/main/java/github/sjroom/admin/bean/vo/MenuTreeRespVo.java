@@ -1,12 +1,10 @@
 package github.sjroom.admin.bean.vo;
 
+import github.sjroom.admin.util.TreeEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
-
-import io.swagger.annotations.ApiModelProperty;
+import java.util.List;
 
 /**
  * <B>说明：菜单管理</B><BR>
@@ -16,22 +14,25 @@ import io.swagger.annotations.ApiModelProperty;
  * @date 2020-07-24 13:41
  */
 @Data
-public class MenuReqVo {
+public class MenuTreeRespVo implements TreeEntity<MenuTreeRespVo> {
 
     @ApiModelProperty("菜单ID")
-    @NotNull
     private Long menuId;
 
     @ApiModelProperty("父菜单ID，一级菜单为0")
-    @NotNull
     private Long parentId;
 
     @ApiModelProperty("菜单名称")
-    @NotBlank
     private String menuName;
+
+    @ApiModelProperty("menu对应的code码")
+    private String menuCode;
 
     @ApiModelProperty("菜单URL")
     private String url;
+
+    @ApiModelProperty("授权(多个用逗号分隔，如：user:list,user:create)")
+    private String perms;
 
     @ApiModelProperty("类型   0：目录   1：菜单   2：按钮")
     private Integer type;
@@ -44,4 +45,12 @@ public class MenuReqVo {
 
     @ApiModelProperty("状态1:启用,0.禁用")
     private Integer status;
+
+    @ApiModelProperty("菜单树")
+    private List<MenuTreeRespVo> children;
+
+    @Override
+    public Long getId() {
+        return this.menuId;
+    }
 }

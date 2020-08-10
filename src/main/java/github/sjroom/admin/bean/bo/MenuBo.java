@@ -54,6 +54,7 @@ public class MenuBo extends PageReqParam {
      * 类型   0：目录   1：菜单   2：按钮
      */
     private Integer type;
+    private Set<Integer> types;
     /**
      * 菜单图标
      */
@@ -85,4 +86,6 @@ public class MenuBo extends PageReqParam {
 
     @ApiModelProperty("角色列表")
     private List<RoleBo> roles;
+
+    private List<MenuBo> children;
 }

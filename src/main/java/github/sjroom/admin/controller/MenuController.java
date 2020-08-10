@@ -1,12 +1,12 @@
 package github.sjroom.admin.controller;
 
-import github.sjroom.admin.bean.bo.MenuBo;
+import com.google.common.collect.Sets;
 import github.sjroom.admin.bean.vo.*;
+import github.sjroom.admin.code.MenuTypeEnum;
 import github.sjroom.admin.service.IMenuServiceComp;
 import github.sjroom.core.mybatis.annotation.FillField;
 import github.sjroom.core.mybatis.page.PageResult;
 import github.sjroom.core.mybatis.page.PageUtil;
-import github.sjroom.core.utils.BeanUtil;
 import github.sjroom.web.vo.IdStatusListVo;
 import github.sjroom.web.vo.IdListVo;
 import github.sjroom.web.vo.IdVo;
@@ -14,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,9 +36,20 @@ public class MenuController {
     @Autowired
     private IMenuServiceComp iMenuServiceComp;
 
+    @ApiOperation(value = "导航栏-菜单目录", notes = "传入id")
+    @PostMapping("nav")
+    public List<MenuTreeRespVo> nav() {
+        return iMenuServiceComp.nav(Sets.newHashSet(MenuTypeEnum.CATALOG.getValue(), MenuTypeEnum.MENU.getValue()));
+    }
+
+    @ApiOperation(value = "导航栏-目录", notes = "传入id")
+    @PostMapping("nav/dir")
+    public List<MenuTreeRespVo> navDir() {
+        return iMenuServiceComp.nav(Sets.newHashSet(MenuTypeEnum.CATALOG.getValue()));
+    }
+
     @ApiOperation(value = "查看", notes = "传入id")
     @PostMapping("find")
-    @FillField
     @PreAuthorize("hasRole('ROLE_SYS_MENU_SELECT')")
     public MenuRespVo find(@Validated @RequestBody IdVo<Long> idVo) {
         return iMenuServiceComp.find(idVo);
@@ -47,7 +57,6 @@ public class MenuController {
 
     @ApiOperation("分页")
     @PostMapping("page")
-    @FillField
     @PreAuthorize("hasRole('ROLE_SYS_MENU_SELECT')")
     public PageResult page(@Validated @RequestBody MenuPageReqVo reqVo) {
         return PageUtil.toPageResult(iMenuServiceComp.page(reqVo), MenuRespVo.class);
@@ -55,9 +64,8 @@ public class MenuController {
 
     @ApiOperation("列表")
     @PostMapping("list")
-    @FillField
     @PreAuthorize("hasRole('ROLE_SYS_MENU_SELECT')")
-    public List<MenuRespVo> list(@RequestBody MenuReqVo reqVo) {
+    public List<MenuRespVo> list(@RequestBody MenuListReqVo reqVo) {
         return iMenuServiceComp.list(reqVo);
     }
 
