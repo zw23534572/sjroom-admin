@@ -38,6 +38,7 @@
 
 <script>
   import { getUUID } from '@/utils'
+  import md5 from 'js-md5'
   export default {
     data () {
       return {
@@ -70,21 +71,22 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl('/sys/login'),
+              url: this.$http.adornUrl('/login'),
               method: 'post',
               data: this.$http.adornData({
                 'username': this.dataForm.userName,
-                'password': this.dataForm.password,
+                'password': md5(this.dataForm.password),
                 'uuid': this.dataForm.uuid,
                 'captcha': this.dataForm.captcha
               })
             }).then(({data}) => {
-              if (data && data.code === 0) {
+              if (data && data.code === 200) {
+                debugger
                 this.$cookie.set('token', data.token)
                 this.$router.replace({ name: 'home' })
               } else {
                 this.getCaptcha()
-                this.$message.error(data.msg)
+                this.$message.error(data.stateMsg)
               }
             })
           }

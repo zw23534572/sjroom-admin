@@ -1,4 +1,4 @@
-package github.sjroom.admin.controller;
+package github.sjroom.admin.controller.sys;
 
 import github.sjroom.admin.bean.vo.UserPageReqVo;
 import github.sjroom.admin.bean.vo.UserReqVo;
@@ -29,7 +29,7 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("user")
+@RequestMapping("sys/user")
 @Api("用户信息 控制器")
 public class UserController {
 	@Autowired

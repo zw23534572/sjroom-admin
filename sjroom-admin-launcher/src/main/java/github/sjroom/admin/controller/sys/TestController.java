@@ -1,4 +1,4 @@
-package github.sjroom.admin.controller;
+package github.sjroom.admin.controller.sys;
 
 
 import org.springframework.web.bind.annotation.GetMapping;

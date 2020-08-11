@@ -195,7 +195,7 @@
                 'icon': this.dataForm.icon
               })
             }).then(({data}) => {
-              if (data && data.code === 0) {
+              if (data && data.code === 200) {
                 this.$message({
                   message: '操作成功',
                   type: 'success',
@@ -206,7 +206,7 @@
                   }
                 })
               } else {
-                this.$message.error(data.msg)
+                this.$message.error(data.stateMsg)
               }
             })
           }

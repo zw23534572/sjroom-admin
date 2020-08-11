@@ -1,4 +1,4 @@
-package github.sjroom.admin.controller;
+package github.sjroom.admin.controller.sys;
 
 import github.sjroom.admin.bean.vo.RoleMenuReqVo;
 import github.sjroom.admin.bean.vo.RolePageReqVo;
@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 @Validated
 @RestController
-@RequestMapping("role")
+@RequestMapping("sys/role")
 @Api("角色 控制器")
 public class RoleController {
 	@Autowired

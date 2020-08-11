@@ -126,7 +126,7 @@
             'username': this.dataForm.userName
           })
         }).then(({data}) => {
-          if (data && data.code === 0) {
+          if (data && data.code === 200) {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
           } else {
@@ -173,7 +173,7 @@
             method: 'post',
             data: this.$http.adornData(userIds, false)
           }).then(({data}) => {
-            if (data && data.code === 0) {
+            if (data && data.code === 200) {
               this.$message({
                 message: '操作成功',
                 type: 'success',
@@ -183,7 +183,7 @@
                 }
               })
             } else {
-              this.$message.error(data.msg)
+              this.$message.error(data.stateMsg)
             }
           })
         }).catch(() => {})
