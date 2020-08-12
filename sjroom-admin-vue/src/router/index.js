@@ -67,15 +67,14 @@ router.beforeEach((to, from, next) => {
       method: 'get',
       params: http.adornParams()
     }).then(({data}) => {
-      if (data && data.code === 200) {
-        fnAddDynamicMenuRoutes(data.menuList)
+      if (data && data.stateCode == '200') {
+        var menuList = data.data
+        fnAddDynamicMenuRoutes(menuList)
         router.options.isAddDynamicMenuRoutes = true
-        sessionStorage.setItem('menuList', JSON.stringify(data.menuList || '[]'))
-        sessionStorage.setItem('permissions', JSON.stringify(data.permissions || '[]'))
+        sessionStorage.setItem('menuList', JSON.stringify(menuList || '[]'))
         next({ ...to, replace: true })
       } else {
         sessionStorage.setItem('menuList', '[]')
-        sessionStorage.setItem('permissions', '[]')
         next()
       }
     }).catch((e) => {
@@ -109,8 +108,8 @@ function fnCurrentRouteType (route, globalRoutes = []) {
 function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
   var temp = []
   for (var i = 0; i < menuList.length; i++) {
-    if (menuList[i].list && menuList[i].list.length >= 1) {
-      temp = temp.concat(menuList[i].list)
+    if (menuList[i].children && menuList[i].children.length >= 1) {
+      temp = temp.concat(menuList[i].children)
     } else if (menuList[i].url && /\S/.test(menuList[i].url)) {
       menuList[i].url = menuList[i].url.replace(/^\//, '')
       var route = {
@@ -119,7 +118,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
         name: menuList[i].url.replace('/', '-'),
         meta: {
           menuId: menuList[i].menuId,
-          title: menuList[i].name,
+          title: menuList[i].menuName,
           isDynamic: true,
           isTab: true,
           iframeUrl: ''
@@ -128,7 +127,7 @@ function fnAddDynamicMenuRoutes (menuList = [], routes = []) {
       // url以http[s]://开头, 通过iframe展示
       if (isURL(menuList[i].url)) {
         route['path'] = `i-${menuList[i].menuId}`
-        route['name'] = `i-${menuList[i].menuId}`
+        route['name'] = `i-${menuList[i].menuName}`
         route['meta']['iframeUrl'] = menuList[i].url
       } else {
         try {

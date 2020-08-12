@@ -39,7 +39,7 @@ export function list () {
 export function info () {
   return {
     // isOpen: false,
-    url: '/sys/user/info',
+    url: '/sys/user/find',
     type: 'get',
     data: {
       'msg': 'success',

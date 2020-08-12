@@ -85,7 +85,7 @@
                 'newPassword': this.dataForm.newPassword
               })
             }).then(({data}) => {
-              if (data && data.code === 200) {
+              if (data && data.stateCode == '200') {
                 this.$message({
                   message: '操作成功',
                   type: 'success',

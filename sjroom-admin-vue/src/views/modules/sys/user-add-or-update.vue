@@ -40,6 +40,7 @@
 
 <script>
   import { isEmail, isMobile } from '@/utils/validate'
+  import md5 from 'js-md5'
   export default {
     data () {
       var validatePassword = (rule, value, callback) => {
@@ -80,7 +81,6 @@
           userName: '',
           password: '',
           comfirmPassword: '',
-          salt: '',
           email: '',
           mobile: '',
           roleIdList: [],
@@ -111,11 +111,11 @@
       init (id) {
         this.dataForm.id = id || 0
         this.$http({
-          url: this.$http.adornUrl('/sys/role/select'),
-          method: 'get',
-          params: this.$http.adornParams()
+          url: this.$http.adornUrl('/sys/role/list'),
+          method: 'post',
+          data: this.$http.adornParams()
         }).then(({data}) => {
-          this.roleList = data && data.code === 200 ? data.list : []
+          this.roleList = data && data.stateCode == '200' ? data.data : []
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {
@@ -124,17 +124,19 @@
         }).then(() => {
           if (this.dataForm.id) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/user/info/${this.dataForm.id}`),
+              url: this.$http.adornUrl('/sys/user/find'),
               method: 'get',
-              params: this.$http.adornParams()
+              params: {
+                id: this.dataForm.id
+              }
             }).then(({data}) => {
-              if (data && data.code === 200) {
-                this.dataForm.userName = data.user.username
-                this.dataForm.salt = data.user.salt
-                this.dataForm.email = data.user.email
-                this.dataForm.mobile = data.user.mobile
-                this.dataForm.roleIdList = data.user.roleIdList
-                this.dataForm.status = data.user.status
+              if (data && data.stateCode == '200') {
+                var model = data.data
+                this.dataForm.userName = model.userName
+                this.dataForm.email = model.email
+                this.dataForm.mobile = model.mobile
+                this.dataForm.roleIdList = model.roleIdList
+                this.dataForm.status = model.status
               }
             })
           }
@@ -149,16 +151,15 @@
               method: 'post',
               data: this.$http.adornData({
                 'userId': this.dataForm.id || undefined,
-                'username': this.dataForm.userName,
-                'password': this.dataForm.password,
-                'salt': this.dataForm.salt,
+                'userName': this.dataForm.userName,
+                'password': md5(this.dataForm.password),
                 'email': this.dataForm.email,
                 'mobile': this.dataForm.mobile,
                 'status': this.dataForm.status,
                 'roleIdList': this.dataForm.roleIdList
               })
             }).then(({data}) => {
-              if (data && data.code === 200) {
+              if (data && data.stateCode == '200') {
                 this.$message({
                   message: '操作成功',
                   type: 'success',

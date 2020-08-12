@@ -78,10 +78,14 @@
           method: 'get',
           params: this.$http.adornParams()
         }).then(({data}) => {
-          if (data && data.code === 200) {
+          if (data && data.stateCode == '200') {
+            let resData = data.data
+            sessionStorage.setItem('permissions', JSON.stringify(resData.permissions || '[]'))
             this.loading = false
-            this.userId = data.user.userId
-            this.userName = data.user.username
+            this.userId = resData.userId
+            this.userName = resData.userName
+          } else {
+            sessionStorage.setItem('permissions', '[]')
           }
         })
       }

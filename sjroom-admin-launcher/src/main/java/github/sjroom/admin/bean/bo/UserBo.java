@@ -1,7 +1,11 @@
 package github.sjroom.admin.bean.bo;
 
+import github.sjroom.admin.bean.entity.User;
+import github.sjroom.admin.bean.entity.UserRole;
 import lombok.Data;
 import java.util.Date;
+import java.util.List;
+
 import github.sjroom.core.mybatis.page.PageReqParam;
 import lombok.EqualsAndHashCode;
 
@@ -67,4 +71,17 @@ public class UserBo extends PageReqParam {
 	 * 更新人
 	 */
 	private String updatedBy;
+	/**
+	 * 用户列表
+	 */
+	private User user;
+	/**
+	 * 用户角色关系列表
+	 */
+	private List<Long> roleIdList;
+	/**
+	 * 用户角色关系列表
+	 */
+	private List<UserRole> userRoles;
+
 }

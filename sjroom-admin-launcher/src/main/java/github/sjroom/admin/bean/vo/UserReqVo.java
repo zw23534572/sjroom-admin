@@ -4,6 +4,8 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
+
 import io.swagger.annotations.ApiModelProperty;
 /**
  * <B>说明：用户信息</B><BR>
@@ -27,20 +29,15 @@ public class UserReqVo  {
 	@NotBlank
     private String password;
 
-    @ApiModelProperty("密码明文")
-	@NotBlank
-    private String passwordPlaintext;
-
     @ApiModelProperty("邮箱")
     private String email;
 
     @ApiModelProperty("手机号码")
     private String mobile;
 
-    @ApiModelProperty("用户类型： 0:普通用户，1:管理员")
-	@NotNull
-    private Integer type;
-
     @ApiModelProperty("0:禁用,1:正常")
     private Integer status;
+
+    @ApiModelProperty("用户角色列表")
+    private List<Long> roleIdList;
 }

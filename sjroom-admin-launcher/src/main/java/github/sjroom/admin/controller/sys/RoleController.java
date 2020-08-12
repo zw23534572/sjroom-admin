@@ -37,7 +37,7 @@ public class RoleController {
 	private IRoleServiceComp iRoleServiceComp;
 	
 	@ApiOperation(value = "查看", notes = "传入id")
-	@PostMapping("find")
+	@RequestMapping("find")
 	@FillField
 	@PreAuthorize("hasRole('ROLE_SYS_ROLE_SELECT')")
 	public RoleRespVo find(@Validated @RequestBody IdVo<Long> idVo) {
@@ -45,7 +45,7 @@ public class RoleController {
 	}
 	
 	@ApiOperation("分页")
-	@PostMapping("page")
+	@RequestMapping("page")
 	@FillField
 	@PreAuthorize("hasRole('ROLE_SYS_ROLE_SELECT')")
 	public PageResult page(@Validated @RequestBody RolePageReqVo reqVo) {
@@ -53,7 +53,7 @@ public class RoleController {
 	}
 	
 	@ApiOperation("列表")
-	@PostMapping("list")
+	@RequestMapping("list")
 	@FillField
 	@PreAuthorize("hasRole('ROLE_SYS_ROLE_SELECT')")
 	public List<RoleRespVo> list(@Validated @RequestBody RoleReqVo reqVo) {
@@ -61,35 +61,35 @@ public class RoleController {
 	}
 	
 	@ApiOperation("创建")
-	@PostMapping("create")
+	@RequestMapping("create")
 	@PreAuthorize("hasRole('ROLE_SYS_ROLE_CREATE')")
 	public Long create(@Validated @RequestBody RoleReqVo roleReqVo) {
 		return iRoleServiceComp.create(roleReqVo);
 	}
 	
 	@ApiOperation("更新")
-	@PostMapping("update")
+	@RequestMapping("update")
 	@PreAuthorize("hasRole('ROLE_SYS_ROLE_UPDATE')")
 	public void update(@Validated @RequestBody RoleReqVo roleReqVo) {
 		iRoleServiceComp.update(roleReqVo);
 	}
 	
 	@ApiOperation(value = "批量更新", notes = "传入id")
-	@PostMapping("batch-update")
+	@RequestMapping("batch-update")
 	@PreAuthorize("hasRole('ROLE_SYS_ROLE_UPDATE')")
 	public void batchUpdate(@Validated @RequestBody IdStatusListVo idStatusListVo) {
 		iRoleServiceComp.updateBatch(idStatusListVo);
 	}
 
 	@ApiOperation(value = "批量删除", notes = "传入id")
-	@PostMapping("batch-remove")
+	@RequestMapping("batch-remove")
 	@PreAuthorize("hasRole('ROLE_SYS_ROLE_REMOVE')")
 	public void removeUpdate(@Validated @RequestBody IdListVo<Long> idListVo) {
 		iRoleServiceComp.removeBatch(idListVo);
 	}
 
 	@ApiOperation("绑定菜单")
-	@PostMapping("bind/menu")
+	@RequestMapping("bind/menu")
 	@PreAuthorize("hasRole('ROLE_BIND_MENU')")
 	public void bindMenu(@Validated @RequestBody RoleMenuReqVo reqVo) {
 		iRoleServiceComp.bindMenu(reqVo);

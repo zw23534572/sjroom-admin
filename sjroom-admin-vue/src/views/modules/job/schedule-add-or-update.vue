@@ -59,7 +59,7 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              if (data && data.code === 200) {
+              if (data && data.stateCode == '200') {
                 this.dataForm.beanName = data.schedule.beanName
                 this.dataForm.params = data.schedule.params
                 this.dataForm.cronExpression = data.schedule.cronExpression
@@ -86,7 +86,7 @@
                 'status': !this.dataForm.id ? undefined : this.dataForm.status
               })
             }).then(({data}) => {
-              if (data && data.code === 200) {
+              if (data && data.stateCode == '200') {
                 this.$message({
                   message: '操作成功',
                   type: 'success',

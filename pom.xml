@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <groupId>github.sjroom</groupId>
-        <artifactId>sjroom-boot</artifactId>
+        <artifactId>sjroom-boot-pom</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
@@ -15,20 +15,6 @@
     <modules>
         <module>sjroom-admin-launcher</module>
     </modules>
-    <dependencies>
-        <dependency>
-            <groupId>github.sjroom</groupId>
-            <artifactId>sjroom-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>github.sjroom</groupId>
-            <artifactId>sjroom-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>github.sjroom</groupId>
-            <artifactId>sjroom-mybatis</artifactId>
-        </dependency>
-    </dependencies>
 
     <build>
         <!-- 设置打包生成的 jar 名称为父工程 -->

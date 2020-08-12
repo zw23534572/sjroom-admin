@@ -112,7 +112,7 @@
             'key': this.dataForm.key
           })
         }).then(({data}) => {
-          if (data && data.code === 200) {
+          if (data && data.stateCode == '200') {
             this.dataList = data.page.list
             this.totalPage = data.page.totalCount
           } else {

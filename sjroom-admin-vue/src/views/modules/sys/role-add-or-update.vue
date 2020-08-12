@@ -74,7 +74,7 @@
               method: 'get',
               params: this.$http.adornParams()
             }).then(({data}) => {
-              if (data && data.code === 200) {
+              if (data && data.stateCode == '200') {
                 this.dataForm.roleName = data.role.roleName
                 this.dataForm.remark = data.role.remark
                 var idx = data.role.menuIdList.indexOf(this.tempKey)
@@ -101,7 +101,7 @@
                 'menuIdList': [].concat(this.$refs.menuListTree.getCheckedKeys(), [this.tempKey], this.$refs.menuListTree.getHalfCheckedKeys())
               })
             }).then(({data}) => {
-              if (data && data.code === 200) {
+              if (data && data.stateCode == '200') {
                 this.$message({
                   message: '操作成功',
                   type: 'success',

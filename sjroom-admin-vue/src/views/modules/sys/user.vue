@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('sys:user:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('sys:user:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('ROLE_SYS_USER_CREATE')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('ROLE_SYS_USER_DELETE')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -30,7 +30,7 @@
         label="ID">
       </el-table-column>
       <el-table-column
-        prop="username"
+        prop="userName"
         header-align="center"
         align="center"
         label="用户名">
@@ -58,7 +58,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="createTime"
+        prop="createdAt"
         header-align="center"
         align="center"
         width="180"
@@ -71,8 +71,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:user:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.userId)">修改</el-button>
-          <el-button v-if="isAuth('sys:user:delete')" type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button>
+          <el-button v-if="isAuth('ROLE_SYS_USER_UPDATE')" type="text" size="small" @click="addOrUpdateHandle(scope.row.userId)">修改</el-button>
+          <el-button v-if="isAuth('ROLE_SYS_USER_DELETE')" type="text" size="small" @click="deleteHandle(scope.row.userId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -118,22 +118,24 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/user/list'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
-            'username': this.dataForm.userName
+          url: this.$http.adornUrl('/sys/user/page'),
+          method: 'post',
+          data: this.$http.adornParams({
+            'pageNum': this.pageIndex,
+            'pageSize': this.pageSize,
+            'userName': this.dataForm.userName
           })
         }).then(({data}) => {
-          if (data && data.code === 200) {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
-          } else {
-            this.dataList = []
-            this.totalPage = 0
+          if (data.stateCode == '200') {
+            if (data.data) {
+              this.dataList = data.data.records
+              this.totalPage = parseInt(data.data.totalCount)
+            } else {
+              this.dataList = []
+              this.totalPage = 0
+            }
+            this.dataListLoading = false
           }
-          this.dataListLoading = false
         })
       },
       // 每页数

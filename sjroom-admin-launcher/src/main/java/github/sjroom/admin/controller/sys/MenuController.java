@@ -37,61 +37,61 @@ public class MenuController {
     private IMenuServiceComp iMenuServiceComp;
 
     @ApiOperation(value = "导航栏-菜单目录", notes = "传入id")
-    @PostMapping("nav")
+    @RequestMapping("nav")
     public List<MenuTreeRespVo> nav() {
         return iMenuServiceComp.nav(Sets.newHashSet(MenuTypeEnum.CATALOG.getValue(), MenuTypeEnum.MENU.getValue()));
     }
 
     @ApiOperation(value = "导航栏-目录", notes = "传入id")
-    @PostMapping("nav/dir")
+    @RequestMapping("nav/dir")
     public List<MenuTreeRespVo> navDir() {
         return iMenuServiceComp.nav(Sets.newHashSet(MenuTypeEnum.CATALOG.getValue()));
     }
 
     @ApiOperation(value = "查看", notes = "传入id")
-    @PostMapping("find")
+    @RequestMapping("find")
     @PreAuthorize("hasRole('ROLE_SYS_MENU_SELECT')")
     public MenuRespVo find(@Validated @RequestBody IdVo<Long> idVo) {
         return iMenuServiceComp.find(idVo);
     }
 
     @ApiOperation("分页")
-    @PostMapping("page")
+    @RequestMapping("page")
     @PreAuthorize("hasRole('ROLE_SYS_MENU_SELECT')")
     public PageResult page(@Validated @RequestBody MenuPageReqVo reqVo) {
         return PageUtil.toPageResult(iMenuServiceComp.page(reqVo), MenuRespVo.class);
     }
 
     @ApiOperation("列表")
-    @PostMapping("list")
+    @RequestMapping("list")
     @PreAuthorize("hasRole('ROLE_SYS_MENU_SELECT')")
     public List<MenuRespVo> list(@RequestBody MenuListReqVo reqVo) {
         return iMenuServiceComp.list(reqVo);
     }
 
     @ApiOperation("创建")
-    @PostMapping("create")
+    @RequestMapping("create")
     @PreAuthorize("hasRole('ROLE_SYS_MENU_CREATE')")
     public Long create(@Validated @RequestBody MenuReqVo menuReqVo) {
         return iMenuServiceComp.create(menuReqVo);
     }
 
     @ApiOperation("更新")
-    @PostMapping("update")
+    @RequestMapping("update")
     @PreAuthorize("hasRole('ROLE_SYS_MENU_UPDATE')")
     public void update(@Validated @RequestBody MenuReqVo menuReqVo) {
         iMenuServiceComp.update(menuReqVo);
     }
 
     @ApiOperation(value = "批量更新", notes = "传入id")
-    @PostMapping("batch-update")
+    @RequestMapping("batch-update")
     @PreAuthorize("hasRole('ROLE_SYS_MENU_UPDATE')")
     public void batchUpdate(@Validated @RequestBody IdStatusListVo idStatusListVo) {
         iMenuServiceComp.updateBatch(idStatusListVo);
     }
 
     @ApiOperation(value = "批量删除", notes = "传入id")
-    @PostMapping("batch-remove")
+    @RequestMapping("batch-remove")
     @PreAuthorize("hasRole('ROLE_SYS_MENU_REMOVE')")
     public void removeUpdate(@Validated @RequestBody IdListVo<Long> idListVo) {
         iMenuServiceComp.removeBatch(idListVo);

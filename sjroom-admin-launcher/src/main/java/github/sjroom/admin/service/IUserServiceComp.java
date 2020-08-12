@@ -22,7 +22,12 @@ public interface IUserServiceComp {
 	/**
 	 * 查看
 	 */
-	UserRespVo find(IdVo<Long> idVo);
+	UserRespVo info();
+
+	/**
+	 * 查看
+	 */
+	UserRespVo find(Long bid);
 
 	/**
 	 * 分页

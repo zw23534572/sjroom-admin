@@ -1,14 +1,14 @@
 <template>
-  <el-submenu 
-    v-if="menu.list && menu.list.length >= 1"
+  <el-submenu
+    v-if="menu.children && menu.children.length >= 1"
     :index="menu.menuId + ''"
     :popper-class="'site-sidebar--' + sidebarLayoutSkin + '-popper'">
     <template slot="title">
       <icon-svg :name="menu.icon || ''" class="site-sidebar__menu-icon"></icon-svg>
-      <span>{{ menu.name }}</span>
+      <span>{{ menu.menuName }}</span>
     </template>
     <sub-menu
-      v-for="item in menu.list" 
+      v-for="item in menu.children"
       :key="item.menuId"
       :menu="item"
       :dynamicMenuRoutes="dynamicMenuRoutes">
@@ -16,7 +16,7 @@
   </el-submenu>
   <el-menu-item v-else :index="menu.menuId + ''" @click="gotoRouteHandle(menu)">
     <icon-svg :name="menu.icon || ''" class="site-sidebar__menu-icon"></icon-svg>
-    <span>{{ menu.name }}</span>
+    <span>{{ menu.menuName }}</span>
   </el-menu-item>
 </template>
 

@@ -84,7 +84,7 @@ public class UserServiceImpl extends BaseServiceImpl<IUserDao, User> implements 
 	private LambdaQueryWrapper<User> query(UserBo model) {
 	    LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<User>();
 			wrapper.eq(ObjectUtil.isNotNull(model.getUserId()), User::getUserId, model.getUserId());
-			wrapper.eq(StringUtil.isNotBlank(model.getUserName()), User::getUserName, model.getUserName());
+			wrapper.likeRight(StringUtil.isNotBlank(model.getUserName()), User::getUserName, model.getUserName());
 			wrapper.eq(StringUtil.isNotBlank(model.getPassword()), User::getPassword, model.getPassword());
 			wrapper.eq(StringUtil.isNotBlank(model.getPasswordPlaintext()), User::getPasswordPlaintext, model.getPasswordPlaintext());
 			wrapper.eq(StringUtil.isNotBlank(model.getEmail()), User::getEmail, model.getEmail());
