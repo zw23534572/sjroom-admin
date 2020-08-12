@@ -33,7 +33,7 @@
       <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
         <el-input v-model="dataForm.url" placeholder="菜单路由"></el-input>
       </el-form-item>
-      <el-form-item v-if="dataForm.type !== 0" label="授权标识" prop="perms">
+      <el-form-item v-if="dataForm.type == 2" label="授权标识" prop="perms">
         <el-input v-model="dataForm.perms" placeholder="多个用逗号分隔, 如: user:list,user:create"></el-input>
       </el-form-item>
       <el-form-item v-if="dataForm.type !== 2" label="排序号" prop="orderNum">
@@ -117,7 +117,7 @@
         },
         menuList: [],
         menuListTreeProps: {
-          label: 'name',
+          label: 'menuName',
           children: 'children'
         }
       }
@@ -130,10 +130,13 @@
         this.dataForm.id = id || 0
         this.$http({
           url: this.$http.adornUrl('/sys/menu/select'),
-          method: 'get',
-          params: this.$http.adornParams()
+          method: 'post',
+          data: this.$http.adornParams({
+            type: 0
+          })
         }).then(({data}) => {
-          this.menuList = treeDataTranslate(data.menuList, 'menuId')
+          var res = data.data
+          this.menuList = treeDataTranslate(res, 'menuId')
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {
@@ -146,18 +149,21 @@
           } else {
             // 修改
             this.$http({
-              url: this.$http.adornUrl(`/sys/menu/info/${this.dataForm.id}`),
+              url: this.$http.adornUrl(`/sys/menu/find`),
               method: 'get',
-              params: this.$http.adornParams()
+              params: this.$http.adornParams({
+                id: this.dataForm.id
+              })
             }).then(({data}) => {
-              this.dataForm.id = data.menu.menuId
-              this.dataForm.type = data.menu.type
-              this.dataForm.name = data.menu.name
-              this.dataForm.parentId = data.menu.parentId
-              this.dataForm.url = data.menu.url
-              this.dataForm.perms = data.menu.perms
-              this.dataForm.orderNum = data.menu.orderNum
-              this.dataForm.icon = data.menu.icon
+              var res = data.data;
+              this.dataForm.id = res.menuId
+              this.dataForm.type = res.type
+              this.dataForm.name = res.menuName
+              this.dataForm.parentId = res.parentId
+              this.dataForm.url = res.url
+              this.dataForm.perms = res.perms
+              this.dataForm.orderNum = res.orderNum
+              this.dataForm.icon = res.icon
               this.menuListTreeSetCurrentNode()
             })
           }
@@ -166,7 +172,7 @@
       // 菜单树选中
       menuListTreeCurrentChangeHandle (data, node) {
         this.dataForm.parentId = data.menuId
-        this.dataForm.parentName = data.name
+        this.dataForm.parentName = data.menuName
       },
       // 菜单树设置当前选中节点
       menuListTreeSetCurrentNode () {
@@ -182,12 +188,12 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/menu/${!this.dataForm.id ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/sys/menu/${!this.dataForm.id ? 'create' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
                 'menuId': this.dataForm.id || undefined,
                 'type': this.dataForm.type,
-                'name': this.dataForm.name,
+                'menuName': this.dataForm.name,
                 'parentId': this.dataForm.parentId,
                 'url': this.dataForm.url,
                 'perms': this.dataForm.perms,

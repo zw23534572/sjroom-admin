@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -80,12 +77,16 @@ public class MenuServiceImpl extends BaseServiceImpl<IMenuDao, Menu> implements 
 
     @Override
     public Map<Long, String> fillFieldName(Set<Long> bIds) {
-        List<MenuBo> menuBos = this.findByBIds(bIds);
-        if (CollectionUtil.isEmpty(menuBos)) {
-            log.warn("MenuServiceImpl find menuBos is empty");
-            return Collections.emptyMap();
+        if (CollectionUtil.isNotEmpty(bIds)){
+            List<MenuBo> menuBos = this.findByBIds(bIds);
+            if (CollectionUtil.isEmpty(menuBos)) {
+                log.warn("MenuServiceImpl find menuBos is empty");
+                return Collections.emptyMap();
+            }
+            return menuBos.stream().collect(Collectors.toMap(MenuBo::getMenuId, MenuBo::getMenuName));
+        }else {
+            return new HashMap<>();
         }
-        return menuBos.stream().collect(Collectors.toMap(MenuBo::getMenuId, MenuBo::getMenuName));
     }
 
     private LambdaQueryWrapper<Menu> query(MenuBo model) {
@@ -94,7 +95,6 @@ public class MenuServiceImpl extends BaseServiceImpl<IMenuDao, Menu> implements 
         wrapper.eq(ObjectUtil.isNotNull(model.getParentId()), Menu::getParentId, model.getParentId());
         wrapper.in(CollectionUtil.isNotEmpty(model.getParentIds()), Menu::getParentId, model.getParentIds());
         wrapper.eq(StringUtil.isNotBlank(model.getMenuName()), Menu::getMenuName, model.getMenuName());
-        wrapper.eq(StringUtil.isNotBlank(model.getMenuCode()), Menu::getMenuCode, model.getMenuCode());
         wrapper.eq(StringUtil.isNotBlank(model.getUrl()), Menu::getUrl, model.getUrl());
         wrapper.eq(StringUtil.isNotBlank(model.getPerms()), Menu::getPerms, model.getPerms());
         wrapper.eq(ObjectUtil.isNotNull(model.getType()), Menu::getType, model.getType());

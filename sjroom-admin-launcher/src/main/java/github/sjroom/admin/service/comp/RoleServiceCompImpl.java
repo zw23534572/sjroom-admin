@@ -15,6 +15,7 @@ import github.sjroom.admin.service.IRoleServiceComp;
 import github.sjroom.core.exception.Assert;
 import github.sjroom.core.exception.BusinessException;
 import github.sjroom.core.mybatis.enums.StatusEnum;
+import github.sjroom.core.mybatis.page.PageUtil;
 import github.sjroom.core.utils.BeanUtil;
 import github.sjroom.core.utils.CollectionUtil;
 import github.sjroom.web.vo.IdListVo;
@@ -62,10 +63,10 @@ public class RoleServiceCompImpl implements IRoleServiceComp {
     }
 
     @Override
-    public IPage page(RolePageReqVo reqVo) {
+    public IPage<RoleRespVo> page(RolePageReqVo reqVo) {
         IPage<RoleBo> roleBoIPage = roleService.findPage(this.buildParams(reqVo));
         this.buildResult(roleBoIPage.getRecords());
-        return roleBoIPage;
+        return PageUtil.toPage(roleBoIPage, RoleRespVo.class);
     }
 
     @Override

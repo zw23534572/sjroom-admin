@@ -1,5 +1,8 @@
 package github.sjroom.admin.code;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 常量
  *
@@ -12,6 +15,5 @@ public interface Constant {
 
     // 上级菜单名称
     String PARENT_EMPTY_NAME = "无";
-
 
 }

@@ -1,5 +1,7 @@
 package github.sjroom.admin.bean.vo;
 
+import github.sjroom.admin.service.impl.MenuServiceImpl;
+import github.sjroom.core.mybatis.annotation.FillFieldName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,6 +24,7 @@ public class MenuRespVo {
     private Long menuId;
 
     @ApiModelProperty("父菜单ID，一级菜单为0")
+    @FillFieldName(invoke = MenuServiceImpl.class)
     private Long parentId;
 
     @ApiModelProperty("菜单名称")
@@ -47,4 +50,5 @@ public class MenuRespVo {
 
     @ApiModelProperty("状态1:启用,0.禁用")
     private Integer status;
+
 }

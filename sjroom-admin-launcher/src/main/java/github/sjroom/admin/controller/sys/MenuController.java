@@ -42,17 +42,25 @@ public class MenuController {
         return iMenuServiceComp.nav(Sets.newHashSet(MenuTypeEnum.CATALOG.getValue(), MenuTypeEnum.MENU.getValue()));
     }
 
-    @ApiOperation(value = "导航栏-目录", notes = "传入id")
-    @RequestMapping("nav/dir")
-    public List<MenuTreeRespVo> navDir() {
-        return iMenuServiceComp.nav(Sets.newHashSet(MenuTypeEnum.CATALOG.getValue()));
+    @ApiOperation(value = "上级菜单", notes = "传入id")
+    @FillField
+    @RequestMapping("select")
+    @PreAuthorize("hasRole('ROLE_SYS_MENU_SELECT')")
+    public List<MenuRespVo> select(@RequestBody MenuListReqVo reqVo) {
+        MenuRespVo menuRespVo = new MenuRespVo();
+        menuRespVo.setMenuId(0L);
+        menuRespVo.setMenuName("导航栏");
+        menuRespVo.setParentId(-1L);
+        List<MenuRespVo> menuRespVos = iMenuServiceComp.list(reqVo);
+        menuRespVos.add(menuRespVo);
+        return menuRespVos;
     }
 
     @ApiOperation(value = "查看", notes = "传入id")
-    @RequestMapping("find")
+    @GetMapping("find")
     @PreAuthorize("hasRole('ROLE_SYS_MENU_SELECT')")
-    public MenuRespVo find(@Validated @RequestBody IdVo<Long> idVo) {
-        return iMenuServiceComp.find(idVo);
+    public MenuRespVo find(Long id) {
+        return iMenuServiceComp.find(id);
     }
 
     @ApiOperation("分页")

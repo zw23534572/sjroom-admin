@@ -57,8 +57,8 @@
         this.dataForm.id = id || 0
         this.$http({
           url: this.$http.adornUrl('/sys/menu/list'),
-          method: 'get',
-          params: this.$http.adornParams()
+          method: 'post',
+          data: this.$http.adornParams()
         }).then(({data}) => {
           this.menuList = treeDataTranslate(data, 'menuId')
         }).then(() => {
@@ -92,7 +92,7 @@
         this.$refs['dataForm'].validate((valid) => {
           if (valid) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/role/${!this.dataForm.id ? 'save' : 'update'}`),
+              url: this.$http.adornUrl(`/sys/role/${!this.dataForm.id ? 'create' : 'update'}`),
               method: 'post',
               data: this.$http.adornData({
                 'roleId': this.dataForm.id || undefined,
@@ -101,7 +101,7 @@
                 'menuIdList': [].concat(this.$refs.menuListTree.getCheckedKeys(), [this.tempKey], this.$refs.menuListTree.getHalfCheckedKeys())
               })
             }).then(({data}) => {
-              if (data && data.stateCode == '200') {
+              if (data.stateCode == '200') {
                 this.$message({
                   message: '操作成功',
                   type: 'success',

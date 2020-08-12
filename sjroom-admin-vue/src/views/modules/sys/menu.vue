@@ -2,7 +2,7 @@
   <div class="mod-menu">
     <el-form :inline="true" :model="dataForm">
       <el-form-item>
-        <el-button v-if="isAuth('sys:menu:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('ROLE_SYS_ROLE_CREATE')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
       </el-form-item>
     </el-form>
 
@@ -12,7 +12,7 @@
       border
       style="width: 100%; ">
       <el-table-column
-        prop="name"
+        prop="menuName"
         header-align="center"
         min-width="150"
         label="名称" >
@@ -72,8 +72,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:menu:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
-          <el-button v-if="isAuth('sys:menu:delete')" type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
+          <el-button v-if="isAuth('ROLE_SYS_ROLE_UPDATE')" type="text" size="small" @click="addOrUpdateHandle(scope.row.menuId)">修改</el-button>
+          <el-button v-if="isAuth('ROLE_SYS_ROLE_DELETE')" type="text" size="small" @click="deleteHandle(scope.row.menuId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -106,10 +106,11 @@
         this.dataListLoading = true
         this.$http({
           url: this.$http.adornUrl('/sys/menu/list'),
-          method: 'get',
-          params: this.$http.adornParams()
+          method: 'post',
+          data: this.$http.adornParams()
         }).then(({data}) => {
-          this.dataList = treeDataTranslate(data, 'menuId')
+          var res = data.data
+          this.dataList = treeDataTranslate(res, 'menuId')
           this.dataListLoading = false
         })
       },

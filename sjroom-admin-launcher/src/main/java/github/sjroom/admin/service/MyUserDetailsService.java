@@ -7,6 +7,7 @@ import github.sjroom.admin.bean.bo.MenuBo;
 import github.sjroom.admin.bean.bo.RoleMenuBo;
 import github.sjroom.admin.bean.bo.UserBo;
 import github.sjroom.admin.bean.bo.UserRoleBo;
+import github.sjroom.admin.bean.entity.Role;
 import github.sjroom.admin.bean.entity.User;
 import github.sjroom.core.context.call.BusinessContext;
 import github.sjroom.core.context.call.BusinessContextHolders;
@@ -53,6 +54,19 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        if (BusinessContextHolders.getMap(username) != null) {
+            ContextDTO contextDTO = (ContextDTO) BusinessContextHolders.getMap(username).getObj();
+
+            // 将用户信息，角色信息存入当前上下文，以便于后期使用
+            BusinessContext<ContextDTO> businessContext = new BusinessContext<ContextDTO>();
+            businessContext.setUserId(contextDTO.getUserBo().getUserId());
+            businessContext.setRoleIds(contextDTO.getRoles().stream().map(Role::getRoleId).collect(Collectors.toSet()));
+            businessContext.setUserName(contextDTO.getUserBo().getUserName());
+            businessContext.setObj(contextDTO);
+            BusinessContextHolders.setContext(businessContext);
+
+            return contextDTO.getJwtUser();
+        }
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<User>().eq(User::getUserName, username);
         User user = iUserService.getOne(queryWrapper);
         Assert.throwOnFalse(ObjectUtil.isNotEmpty(user), ISecrityErrorCode.TOKEN_USER_NAME_DB_NULL);
@@ -100,6 +114,7 @@ public class MyUserDetailsService implements UserDetailsService {
         businessContext.setUserName(user.getUserName());
         businessContext.setObj(contextDTO);
         BusinessContextHolders.setContext(businessContext);
+        BusinessContextHolders.setMap(user.getUserName(), businessContext);
         return jwtUser;
     }
 }

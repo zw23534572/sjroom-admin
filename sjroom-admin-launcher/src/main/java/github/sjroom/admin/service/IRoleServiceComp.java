@@ -30,7 +30,7 @@ public interface IRoleServiceComp {
     /**
      * 分页
      */
-    IPage page(RolePageReqVo reqVo);
+    IPage<RoleRespVo> page(RolePageReqVo reqVo);
 
     /**
      * 列表

@@ -61,8 +61,8 @@ public class MenuServiceCompImpl implements IMenuServiceComp {
     }
 
     @Override
-    public MenuRespVo find(IdVo<Long> idVo) {
-        return BeanUtil.copy(menuService.findByBId(idVo.getId()), MenuRespVo.class);
+    public MenuRespVo find(Long bid) {
+        return BeanUtil.copy(menuService.findByBId(bid), MenuRespVo.class);
     }
 
     @Override
@@ -88,6 +88,7 @@ public class MenuServiceCompImpl implements IMenuServiceComp {
 
     @Override
     public void update(MenuReqVo reqVo) {
+        Assert.throwOnFalse(ObjectUtil.isNotEmpty(reqVo.getMenuId()), SjroomErrorCode.PARAM_ERROR_01, "menuId");
         MenuBo menuBo = this.validatedParams(reqVo);
         Menu menu = this.fetchEntityData(menuBo);
         menu.setUpdatedAt(new Date());
@@ -196,13 +197,13 @@ public class MenuServiceCompImpl implements IMenuServiceComp {
         //目录、菜单
         if (reqVo.getType() == MenuTypeEnum.CATALOG.getValue() ||
                 reqVo.getType() == MenuTypeEnum.MENU.getValue()) {
-            Assert.throwOnFalse(parentType != MenuTypeEnum.CATALOG.getValue(),
+            Assert.throwOnFalse(parentType == MenuTypeEnum.CATALOG.getValue(),
                     SjroomErrorCode.SYSTEM_ERROR, "上级菜单只能为目录类型");
         }
 
         //按钮
         if (reqVo.getType() == MenuTypeEnum.BUTTON.getValue()) {
-            Assert.throwOnFalse(parentType != MenuTypeEnum.MENU.getValue(),
+            Assert.throwOnFalse(parentType == MenuTypeEnum.MENU.getValue(),
                     SjroomErrorCode.SYSTEM_ERROR, "上级菜单只能为菜单类型");
         }
         return menuBo;
@@ -217,28 +218,17 @@ public class MenuServiceCompImpl implements IMenuServiceComp {
     private Menu fetchEntityData(MenuBo menuBo) {
         Menu menu = BeanUtil.copy(menuBo, Menu.class);
 
-        Integer maxOrderNum = 0; //最大的orderNum
-        if (ObjectUtil.isEmpty(menu.getOrderNum()) ||
-                StringUtil.isEmpty(menu.getMenuCode())) {
-
+        //获取排序号
+        if (ObjectUtil.isEmpty(menu.getOrderNum())) {
             List<MenuBo> parentMenuMenuBos = menuService.findByParentIds(Collections.singleton(menu.getParentId()));
             //获取当前父级下，最大的orderNum ，并且+1
-            maxOrderNum = parentMenuMenuBos
+            Integer maxOrderNum = parentMenuMenuBos
                     .stream()
                     .filter(i -> !i.getMenuId().equals(menu.getMenuId()))
                     .mapToInt(i -> i.getOrderNum()).max().getAsInt() + 1;
-        }
-
-        //获取排序号
-        if (ObjectUtil.isEmpty(menu.getOrderNum())) {
             menu.setOrderNum(maxOrderNum + 1);
         }
 
-        //获取菜单code码
-        if (StringUtil.isEmpty(menu.getMenuCode())) {
-            MenuBo parentMenuBo = menuService.findByBId(menu.getParentId());
-            menu.setMenuCode(parentMenuBo.getMenuCode() + StringPool.COMMA + "00" + maxOrderNum);
-        }
         return menu;
     }
 }

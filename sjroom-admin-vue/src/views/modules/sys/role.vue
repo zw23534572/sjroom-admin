@@ -6,8 +6,8 @@
       </el-form-item>
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
-        <el-button v-if="isAuth('sys:role:save')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('sys:role:delete')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('ROLE_SYS_ROLE_CREATE')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
+        <el-button v-if="isAuth('ROLE_SYS_USER_DELETE')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -26,7 +26,7 @@
         prop="roleId"
         header-align="center"
         align="center"
-        width="80"
+        width="200"
         label="ID">
       </el-table-column>
       <el-table-column
@@ -42,7 +42,7 @@
         label="备注">
       </el-table-column>
       <el-table-column
-        prop="createTime"
+        prop="createdAt"
         header-align="center"
         align="center"
         width="180"
@@ -55,8 +55,8 @@
         width="150"
         label="操作">
         <template slot-scope="scope">
-          <el-button v-if="isAuth('sys:role:update')" type="text" size="small" @click="addOrUpdateHandle(scope.row.roleId)">修改</el-button>
-          <el-button v-if="isAuth('sys:role:delete')" type="text" size="small" @click="deleteHandle(scope.row.roleId)">删除</el-button>
+          <el-button v-if="isAuth('ROLE_SYS_ROLE_UPDATE')" type="text" size="small" @click="addOrUpdateHandle(scope.row.roleId)">修改</el-button>
+          <el-button v-if="isAuth('ROLE_SYS_ROLE_DELETE')" type="text" size="small" @click="deleteHandle(scope.row.roleId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -102,20 +102,23 @@
       getDataList () {
         this.dataListLoading = true
         this.$http({
-          url: this.$http.adornUrl('/sys/role/list'),
-          method: 'get',
-          params: this.$http.adornParams({
-            'page': this.pageIndex,
-            'limit': this.pageSize,
+          url: this.$http.adornUrl('/sys/role/page'),
+          method: 'post',
+          data: this.$http.adornParams({
+            'pageNum': this.pageIndex,
+            'pageSize': this.pageSize,
             'roleName': this.dataForm.roleName
           })
         }).then(({data}) => {
-          if (data && data.stateCode == '200') {
-            this.dataList = data.page.list
-            this.totalPage = data.page.totalCount
-          } else {
-            this.dataList = []
-            this.totalPage = 0
+          if (data.stateCode == '200') {
+            if (data.data) {
+              var res = data.data
+              this.dataList = res.records
+              this.totalPage = parseInt(res.totalCount)
+            } else {
+              this.dataList = []
+              this.totalPage = 0
+            }
           }
           this.dataListLoading = false
         })

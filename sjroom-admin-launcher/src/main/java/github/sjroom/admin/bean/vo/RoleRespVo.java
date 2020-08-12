@@ -30,6 +30,9 @@ public class RoleRespVo {
     @ApiModelProperty("状态1:启用,0.禁用")
     private Integer status;
 
+    @ApiModelProperty("创建时间")
+    private Date createdAt;
+
     @ApiModelProperty("菜单集合列表")
     private List<MenuReqVo> menus;
 }

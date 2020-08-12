@@ -19,7 +19,6 @@ import io.swagger.annotations.ApiModelProperty;
 public class MenuReqVo {
 
     @ApiModelProperty("菜单ID")
-    @NotNull
     private Long menuId;
 
     @ApiModelProperty("父菜单ID，一级菜单为0")

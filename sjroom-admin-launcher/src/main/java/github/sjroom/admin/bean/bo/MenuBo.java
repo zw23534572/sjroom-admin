@@ -39,10 +39,6 @@ public class MenuBo extends PageReqParam {
      */
     private String menuName;
     /**
-     * menu对应的code码
-     */
-    private String menuCode;
-    /**
      * 菜单URL
      */
     private String url;

@@ -28,7 +28,7 @@ public interface IMenuServiceComp {
     /**
      * 查看
      */
-    MenuRespVo find(IdVo<Long> idVo);
+    MenuRespVo find(Long bid);
 
     /**
      * 分页
