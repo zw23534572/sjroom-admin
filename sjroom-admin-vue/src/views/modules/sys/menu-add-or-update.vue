@@ -4,14 +4,17 @@
     :close-on-click-modal="false"
     :visible.sync="visible">
     <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" label-width="80px">
+      <!-- 菜单类型 -->
       <el-form-item label="类型" prop="type">
         <el-radio-group v-model="dataForm.type">
           <el-radio v-for="(type, index) in dataForm.typeList" :label="index" :key="index">{{ type }}</el-radio>
         </el-radio-group>
       </el-form-item>
+      <!-- 菜单名称 -->
       <el-form-item :label="dataForm.typeList[dataForm.type] + '名称'" prop="name">
         <el-input v-model="dataForm.name" :placeholder="dataForm.typeList[dataForm.type] + '名称'"></el-input>
       </el-form-item>
+      <!-- 上级菜单 -->
       <el-form-item label="上级菜单" prop="parentName">
         <el-popover
           ref="menuListPopover"
@@ -30,9 +33,11 @@
         </el-popover>
         <el-input v-model="dataForm.parentName" v-popover:menuListPopover :readonly="true" placeholder="点击选择上级菜单" class="menu-list__input"></el-input>
       </el-form-item>
+      <!--  菜单路由  -->
       <el-form-item v-if="dataForm.type === 1" label="菜单路由" prop="url">
         <el-input v-model="dataForm.url" placeholder="菜单路由"></el-input>
       </el-form-item>
+      <!--  授权标识  -->
       <el-form-item v-if="dataForm.type == 2" label="授权标识" prop="perms">
         <el-input v-model="dataForm.perms" placeholder="多个用逗号分隔, 如: user:list,user:create"></el-input>
       </el-form-item>
@@ -137,6 +142,7 @@
         }).then(({data}) => {
           var res = data.data
           this.menuList = treeDataTranslate(res, 'menuId')
+          debugger
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {
@@ -155,11 +161,12 @@
                 id: this.dataForm.id
               })
             }).then(({data}) => {
-              var res = data.data;
+              var res = data.data
               this.dataForm.id = res.menuId
               this.dataForm.type = res.type
               this.dataForm.name = res.menuName
               this.dataForm.parentId = res.parentId
+              this.dataForm.parentName = res.parentName
               this.dataForm.url = res.url
               this.dataForm.perms = res.perms
               this.dataForm.orderNum = res.orderNum
@@ -173,11 +180,13 @@
       menuListTreeCurrentChangeHandle (data, node) {
         this.dataForm.parentId = data.menuId
         this.dataForm.parentName = data.menuName
+        debugger
       },
       // 菜单树设置当前选中节点
       menuListTreeSetCurrentNode () {
         this.$refs.menuListTree.setCurrentKey(this.dataForm.parentId)
-        this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {})['name']
+        this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {})['menuName']
+        debugger
       },
       // 图标选中
       iconActiveHandle (iconName) {
