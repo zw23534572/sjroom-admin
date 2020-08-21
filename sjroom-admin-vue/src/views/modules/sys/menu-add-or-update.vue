@@ -7,7 +7,7 @@
       <!-- 菜单类型 -->
       <el-form-item label="类型" prop="type">
         <el-radio-group v-model="dataForm.type">
-          <el-radio v-for="(type, index) in dataForm.typeList" :label="index" :key="index">{{ type }}</el-radio>
+          <el-radio v-for="(type, index) in dataForm.typeList" :label="index" :key="index" @change="menuSelect">{{ type }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <!-- 菜单名称 -->
@@ -133,60 +133,66 @@
     methods: {
       init (id) {
         this.dataForm.id = id || 0
+        if (this.dataForm.id == 0) {
+          this.$nextTick(() => {
+            this.$refs['dataForm'].resetFields()
+          })
+        }
+        this.menuFind()
+        this.visible = true
+      },
+      // 查询
+      menuSelect (type) {
         this.$http({
           url: this.$http.adornUrl('/sys/menu/select'),
           method: 'post',
           data: this.$http.adornParams({
-            type: 0
+            type: type
           })
         }).then(({data}) => {
           var res = data.data
           this.menuList = treeDataTranslate(res, 'menuId')
-          debugger
         }).then(() => {
-          this.visible = true
-          this.$nextTick(() => {
-            this.$refs['dataForm'].resetFields()
-          })
-        }).then(() => {
-          if (!this.dataForm.id) {
-            // 新增
-            this.menuListTreeSetCurrentNode()
-          } else {
-            // 修改
-            this.$http({
-              url: this.$http.adornUrl(`/sys/menu/find`),
-              method: 'get',
-              params: this.$http.adornParams({
-                id: this.dataForm.id
-              })
-            }).then(({data}) => {
-              var res = data.data
-              this.dataForm.id = res.menuId
-              this.dataForm.type = res.type
-              this.dataForm.name = res.menuName
-              this.dataForm.parentId = res.parentId
-              this.dataForm.parentName = res.parentName
-              this.dataForm.url = res.url
-              this.dataForm.perms = res.perms
-              this.dataForm.orderNum = res.orderNum
-              this.dataForm.icon = res.icon
-              this.menuListTreeSetCurrentNode()
-            })
-          }
+          this.menuListTreeSetCurrentNode()
         })
+      },
+      // 菜单树选中
+      menuFind () {
+        if (!this.dataForm.id) {
+          // 新增
+          this.menuSelect(this.dataForm.type)
+        } else {
+          // 修改
+          this.$http({
+            url: this.$http.adornUrl(`/sys/menu/find`),
+            method: 'get',
+            params: this.$http.adornParams({
+              id: this.dataForm.id
+            })
+          }).then(({data}) => {
+            var res = data.data
+            this.dataForm.id = res.menuId
+            this.dataForm.type = res.type
+            this.dataForm.name = res.menuName
+            this.dataForm.parentId = res.parentId
+            this.dataForm.parentName = res.parentName
+            this.dataForm.url = res.url
+            this.dataForm.perms = res.perms
+            this.dataForm.orderNum = res.orderNum
+            this.dataForm.icon = res.icon
+            this.menuSelect(this.dataForm.type)
+          })
+        }
       },
       // 菜单树选中
       menuListTreeCurrentChangeHandle (data, node) {
         this.dataForm.parentId = data.menuId
         this.dataForm.parentName = data.menuName
-        debugger
       },
       // 菜单树设置当前选中节点
       menuListTreeSetCurrentNode () {
         this.$refs.menuListTree.setCurrentKey(this.dataForm.parentId)
         this.dataForm.parentName = (this.$refs.menuListTree.getCurrentNode() || {})['menuName']
-        debugger
       },
       // 图标选中
       iconActiveHandle (iconName) {

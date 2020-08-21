@@ -49,6 +49,7 @@ export function select () {
 
 // 获取角色信息
 export function info () {
+  debugger
   return {
     // isOpen: false,
     url: '/sys/role/info',

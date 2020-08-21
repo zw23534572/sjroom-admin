@@ -36,7 +36,7 @@
         visible: false,
         menuList: [],
         menuListTreeProps: {
-          label: 'name',
+          label: 'menuName',
           children: 'children'
         },
         dataForm: {
@@ -60,7 +60,8 @@
           method: 'post',
           data: this.$http.adornParams()
         }).then(({data}) => {
-          this.menuList = treeDataTranslate(data, 'menuId')
+          var res = data.data
+          this.menuList = treeDataTranslate(res, 'menuId')
         }).then(() => {
           this.visible = true
           this.$nextTick(() => {
@@ -70,18 +71,21 @@
         }).then(() => {
           if (this.dataForm.id) {
             this.$http({
-              url: this.$http.adornUrl(`/sys/role/info/${this.dataForm.id}`),
+              url: this.$http.adornUrl(`/sys/role/find`),
               method: 'get',
-              params: this.$http.adornParams()
+              params: this.$http.adornParams({
+                id: this.dataForm.id
+              })
             }).then(({data}) => {
               if (data && data.stateCode == '200') {
-                this.dataForm.roleName = data.role.roleName
-                this.dataForm.remark = data.role.remark
-                var idx = data.role.menuIdList.indexOf(this.tempKey)
+                var res = data.data
+                this.dataForm.roleName = res.roleName
+                this.dataForm.remark = res.remark
+                var idx = res.menuIdList.indexOf(this.tempKey)
                 if (idx !== -1) {
-                  data.role.menuIdList.splice(idx, data.role.menuIdList.length - idx)
+                  res.menuIdList.splice(idx, res.menuIdList.length - idx)
                 }
-                this.$refs.menuListTree.setCheckedKeys(data.role.menuIdList)
+                this.$refs.menuListTree.setCheckedKeys(res.menuIdList)
               }
             })
           }
@@ -90,6 +94,9 @@
       // 表单提交
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
+          console.log(`this.$refs.menuListTree.getCheckedKeys() ${this.$refs.menuListTree.getCheckedKeys()}`)
+          console.log(`this.$refs.menuListTree.getHalfCheckedKeys() ${this.tempKey}`)
+          console.log(`this.$refs.menuListTree.getHalfCheckedKeys() ${this.$refs.menuListTree.getHalfCheckedKeys()}`)
           if (valid) {
             this.$http({
               url: this.$http.adornUrl(`/sys/role/${!this.dataForm.id ? 'create' : 'update'}`),
@@ -98,7 +105,7 @@
                 'roleId': this.dataForm.id || undefined,
                 'roleName': this.dataForm.roleName,
                 'remark': this.dataForm.remark,
-                'menuIdList': [].concat(this.$refs.menuListTree.getCheckedKeys(), [this.tempKey], this.$refs.menuListTree.getHalfCheckedKeys())
+                'menuIdList': [].concat(this.$refs.menuListTree.getCheckedKeys())
               })
             }).then(({data}) => {
               if (data.stateCode == '200') {

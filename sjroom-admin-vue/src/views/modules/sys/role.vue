@@ -7,7 +7,7 @@
       <el-form-item>
         <el-button @click="getDataList()">查询</el-button>
         <el-button v-if="isAuth('ROLE_SYS_ROLE_CREATE')" type="primary" @click="addOrUpdateHandle()">新增</el-button>
-        <el-button v-if="isAuth('ROLE_SYS_USER_DELETE')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
+        <el-button v-if="isAuth('ROLE_SYS_ROLE_REMOVE')" type="danger" @click="deleteHandle()" :disabled="dataListSelections.length <= 0">批量删除</el-button>
       </el-form-item>
     </el-form>
     <el-table
@@ -56,7 +56,8 @@
         label="操作">
         <template slot-scope="scope">
           <el-button v-if="isAuth('ROLE_SYS_ROLE_UPDATE')" type="text" size="small" @click="addOrUpdateHandle(scope.row.roleId)">修改</el-button>
-          <el-button v-if="isAuth('ROLE_SYS_ROLE_DELETE')" type="text" size="small" @click="deleteHandle(scope.row.roleId)">删除</el-button>
+          <el-button v-if="isAuth('ROLE_SYS_ROLE_UPDATE')" type="text" size="small" @click="enableOrUnEnable(scope.row.roleId,scope.row.status)">{{scope.row.status==1?'禁用':'启用'}}</el-button>
+          <el-button v-if="isAuth('ROLE_SYS_ROLE_REMOVE')" type="text" size="small" @click="deleteHandle(scope.row.roleId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -145,6 +146,36 @@
           this.$refs.addOrUpdate.init(id)
         })
       },
+      // enable 启用
+      enableOrUnEnable (id, status) {
+        this.$confirm(`确定对[id=${id}]进行[${status == '1' ? '禁用' : '启用'}]操作?`, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http({
+            url: this.$http.adornUrl(`/sys/role/batch-update`),
+            method: 'post',
+            data: this.$http.adornData({
+              idList: [id],
+              status: status == 1 ? 0 : 1
+            })
+          }).then(({data}) => {
+            if (data && data.stateCode == '200') {
+              this.$message({
+                message: '操作成功',
+                type: 'success',
+                duration: 1500,
+                onClose: () => {
+                  this.getDataList()
+                }
+              })
+            } else {
+              this.$message.error(data.stateMsg)
+            }
+          })
+        }).catch(() => {})
+      },
       // 删除
       deleteHandle (id) {
         var ids = id ? [id] : this.dataListSelections.map(item => {
@@ -156,9 +187,11 @@
           type: 'warning'
         }).then(() => {
           this.$http({
-            url: this.$http.adornUrl('/sys/role/delete'),
+            url: this.$http.adornUrl('/sys/role/batch-remove'),
             method: 'post',
-            data: this.$http.adornData(ids, false)
+            data: this.$http.adornData({
+              idList: ids
+            }, false)
           }).then(({data}) => {
             if (data && data.stateCode == '200') {
               this.$message({
