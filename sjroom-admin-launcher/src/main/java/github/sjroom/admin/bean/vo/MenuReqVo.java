@@ -38,6 +38,9 @@ public class MenuReqVo {
     @ApiModelProperty("菜单图标")
     private String icon;
 
+    @ApiModelProperty("授权标识")
+    private String perms;
+
     @ApiModelProperty("排序")
     private Integer orderNum;
 

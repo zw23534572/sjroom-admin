@@ -25,7 +25,7 @@ public interface IRoleServiceComp {
     /**
      * 查看
      */
-    RoleRespVo find(IdVo<Long> idVo);
+    RoleRespVo find(Long bId);
 
     /**
      * 分页

@@ -13,6 +13,7 @@ import github.sjroom.core.exception.BusinessException;
 import github.sjroom.core.mybatis.enums.StatusEnum;
 import github.sjroom.core.exception.Assert;
 import github.sjroom.core.mybatis.page.PageUtil;
+import github.sjroom.core.mybatis.util.IdUtil;
 import github.sjroom.core.utils.BeanUtil;
 import github.sjroom.core.utils.CollectionUtil;
 import github.sjroom.admin.bean.bo.UserBo;
@@ -99,10 +100,13 @@ public class UserServiceCompImpl implements IUserServiceComp {
     @Override
     @Transactional(rollbackFor = BusinessException.class)
     public Long create(UserReqVo reqVo) {
+        reqVo.setUserId(IdUtil.getBId());
         UserBo userBo = this.validatedParams(reqVo);
         this.fetchEntityData(userBo);
         userService.save(userBo.getUser());
-        iUserRoleService.saveBatch(userBo.getUserRoles());
+        if (CollectionUtil.isNotEmpty(userBo.getUserRoles())) {
+            iUserRoleService.saveBatch(userBo.getUserRoles());
+        }
         return userBo.getUser().getUserId();
     }
 
@@ -114,9 +118,11 @@ public class UserServiceCompImpl implements IUserServiceComp {
 
         userService.updateByBId(userBo.getUser());
         LambdaQueryWrapper lambdaQueryWrapper = new LambdaQueryWrapper<UserRole>()
-                .eq(UserRole::getUserId,reqVo.getUserId());
+                .eq(UserRole::getUserId, reqVo.getUserId());
         iUserRoleService.remove(lambdaQueryWrapper);
-        iUserRoleService.saveBatch(userBo.getUserRoles());
+        if (CollectionUtil.isNotEmpty(userBo.getUserRoles())) {
+            iUserRoleService.saveBatch(userBo.getUserRoles());
+        }
     }
 
     @Override
@@ -194,7 +200,7 @@ public class UserServiceCompImpl implements IUserServiceComp {
     private void fetchEntityData(UserBo userBo) {
         User user = BeanUtil.copy(userBo, User.class);
         user.setUpdatedAt(new Date());
-        if (StringUtil.isNotBlank(userBo.getPassword())){
+        if (StringUtil.isNotBlank(userBo.getPassword())) {
             //密码修改，md5加密
             user.setPasswordPlaintext(userBo.getPassword());
             user.setPassword(MD5Util.md5(userBo.getPassword()));

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * <B>说明：菜单管理</B><BR>
@@ -30,6 +31,7 @@ public class MenuListReqVo {
 
     @ApiModelProperty("类型   0：目录   1：菜单   2：按钮")
     private Integer type;
+    private Set<Integer> types;
 
     @ApiModelProperty("菜单图标")
     private String icon;

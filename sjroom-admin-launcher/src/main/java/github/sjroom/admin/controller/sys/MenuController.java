@@ -7,9 +7,9 @@ import github.sjroom.admin.service.IMenuServiceComp;
 import github.sjroom.core.mybatis.annotation.FillField;
 import github.sjroom.core.mybatis.page.PageResult;
 import github.sjroom.core.mybatis.page.PageUtil;
+import github.sjroom.core.utils.ObjectUtil;
 import github.sjroom.web.vo.IdStatusListVo;
 import github.sjroom.web.vo.IdListVo;
-import github.sjroom.web.vo.IdVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +51,20 @@ public class MenuController {
         menuRespVo.setMenuId(0L);
         menuRespVo.setMenuName("导航栏");
         menuRespVo.setParentId(-1L);
+
+        if (ObjectUtil.isNotNull(reqVo.getType())) {
+            if (reqVo.getType() == MenuTypeEnum.BUTTON.getValue()) {
+                reqVo.setTypes(Sets.newHashSet(MenuTypeEnum.CATALOG.getValue(), MenuTypeEnum.MENU.getValue()));
+            }
+            if (reqVo.getType() == MenuTypeEnum.CATALOG.getValue()) {
+                reqVo.setTypes(Sets.newHashSet(MenuTypeEnum.CATALOG.getValue()));
+            }
+            if (reqVo.getType() == MenuTypeEnum.MENU.getValue()) {
+                reqVo.setTypes(Sets.newHashSet(MenuTypeEnum.CATALOG.getValue()));
+            }
+            reqVo.setType(null);
+        }
+
         List<MenuRespVo> menuRespVos = iMenuServiceComp.list(reqVo);
         menuRespVos.add(menuRespVo);
         return menuRespVos;

@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,13 +29,13 @@ public class LoginController {
     @Autowired
     private ILoginService iLoginService;
 
-    @RequestMapping("/login")
+    @PostMapping("/login")
     @ApiOperation(value = "登陆")
     public RespVo login(@RequestBody JwtUserVo reqVo) throws Exception {
         return iLoginService.login(reqVo);
     }
 
-    @RequestMapping("/sys/logout")
+    @PostMapping("/sys/logout")
     @ApiOperation(value = "注销")
     public void logout() throws Exception {
        log.info("LoginController logout");

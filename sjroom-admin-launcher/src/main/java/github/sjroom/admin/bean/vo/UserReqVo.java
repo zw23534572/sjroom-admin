@@ -18,7 +18,6 @@ import io.swagger.annotations.ApiModelProperty;
 public class UserReqVo  {
 
     @ApiModelProperty("账号")
-	@NotNull
     private Long userId;
 
     @ApiModelProperty("用户名称")

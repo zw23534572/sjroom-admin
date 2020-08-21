@@ -84,7 +84,7 @@ public class RoleServiceImpl extends BaseServiceImpl<IRoleDao, Role> implements 
 	private LambdaQueryWrapper<Role> query(RoleBo model) {
 	    LambdaQueryWrapper<Role> wrapper = new LambdaQueryWrapper<Role>();
 			wrapper.eq(ObjectUtil.isNotNull(model.getRoleId()), Role::getRoleId, model.getRoleId());
-			wrapper.eq(StringUtil.isNotBlank(model.getRoleName()), Role::getRoleName, model.getRoleName());
+			wrapper.likeRight(StringUtil.isNotBlank(model.getRoleName()), Role::getRoleName, model.getRoleName());
 			wrapper.eq(StringUtil.isNotBlank(model.getRemark()), Role::getRemark, model.getRemark());
 			wrapper.eq(ObjectUtil.isNotNull(model.getStatus()), Role::getStatus, model.getStatus());
 		return wrapper;

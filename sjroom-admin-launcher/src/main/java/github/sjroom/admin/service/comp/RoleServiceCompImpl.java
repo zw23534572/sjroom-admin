@@ -16,6 +16,7 @@ import github.sjroom.core.exception.Assert;
 import github.sjroom.core.exception.BusinessException;
 import github.sjroom.core.mybatis.enums.StatusEnum;
 import github.sjroom.core.mybatis.page.PageUtil;
+import github.sjroom.core.mybatis.util.IdUtil;
 import github.sjroom.core.utils.BeanUtil;
 import github.sjroom.core.utils.CollectionUtil;
 import github.sjroom.web.vo.IdListVo;
@@ -45,20 +46,20 @@ public class RoleServiceCompImpl implements IRoleServiceComp {
     private IRoleService roleService;
     @Autowired
     private IRoleMenuService iRoleMenuService;
-    @Autowired
-    private IMenuService iMenuService;
 
     @Override
-    public RoleRespVo find(IdVo<Long> idVo) {
-        RoleBo roleBo = roleService.findByBId(idVo.getId());
+    public RoleRespVo find(Long bid) {
+        RoleBo roleBo = roleService.findByBId(bid);
+        RoleRespVo respVo = BeanUtil.copy(roleBo, RoleRespVo.class);
+
         List<RoleMenuBo> roleMenuBos = iRoleMenuService.findByRoleIds(Collections.singleton(roleBo.getRoleId()));
         if (CollectionUtil.isNotEmpty(roleMenuBos)) {
             Set<Long> menuIds = roleMenuBos.stream().map(RoleMenuBo::getMenuId).collect(Collectors.toSet());
-            roleBo.setMenus(iMenuService.findByBIds(menuIds));
+            respVo.setMenuIdList(menuIds);
+        } else {
+            respVo.setMenuIdList(new HashSet<>());
         }
 
-        RoleRespVo respVo = BeanUtil.copy(roleBo, RoleRespVo.class);
-        respVo.setMenus(BeanUtil.copy(roleBo.getMenus(), MenuReqVo.class));
         return respVo;
     }
 
@@ -76,19 +77,33 @@ public class RoleServiceCompImpl implements IRoleServiceComp {
     }
 
     @Override
+    @Transactional(rollbackFor = BusinessException.class)
     public Long create(RoleReqVo reqVo) {
+        reqVo.setRoleId(IdUtil.getBId());
         RoleBo roleBo = this.validatedParams(reqVo);
-        Role role = this.fetchEntityData(roleBo);
+        List<RoleMenu> roleMenus = new ArrayList<>();
+        Role role = this.fetchEntityData(roleBo, roleMenus);
         roleService.save(role);
+        if (CollectionUtil.isNotEmpty(roleMenus)) {
+            iRoleMenuService.saveBatch(roleMenus);
+        }
         return role.getRoleId();
     }
 
     @Override
+    @Transactional(rollbackFor = BusinessException.class)
     public void update(RoleReqVo reqVo) {
         RoleBo roleBo = this.validatedParams(reqVo);
-        Role role = this.fetchEntityData(roleBo);
+        List<RoleMenu> roleMenus = new ArrayList<>();
+        Role role = this.fetchEntityData(roleBo, roleMenus);
         role.setUpdatedAt(new Date());
         roleService.updateByBId(role);
+        LambdaQueryWrapper<RoleMenu> wrapper = new LambdaQueryWrapper<RoleMenu>()
+                .eq(RoleMenu::getRoleId, role.getRoleId());
+        iRoleMenuService.remove(wrapper);
+        if (CollectionUtil.isNotEmpty(roleMenus)) {
+            iRoleMenuService.saveBatch(roleMenus);
+        }
     }
 
     @Override
@@ -179,8 +194,13 @@ public class RoleServiceCompImpl implements IRoleServiceComp {
      * @param roleBo
      * @return
      */
-    private Role fetchEntityData(RoleBo roleBo) {
-        Role role = BeanUtil.copy(roleBo, Role.class);
-        return role;
+    private Role fetchEntityData(RoleBo roleBo, List<RoleMenu> roleMenus) {
+        roleBo.getMenuIdList().stream().forEach(menuId -> {
+            RoleMenu roleMenu = new RoleMenu();
+            roleMenu.setMenuId(menuId);
+            roleMenu.setRoleId(roleBo.getRoleId());
+            roleMenus.add(roleMenu);
+        });
+        return BeanUtil.copy(roleBo, Role.class);
     }
 }

@@ -16,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,14 +37,14 @@ public class UserController {
     private IUserServiceComp iUserServiceComp;
 
     @ApiOperation(value = "查看自己信息", notes = "传入id")
-    @RequestMapping("info")
+    @GetMapping("info")
     @FillField
     public UserRespVo info() {
         return iUserServiceComp.info();
     }
 
     @ApiOperation(value = "查看", notes = "传入id")
-    @RequestMapping("find")
+    @GetMapping("find")
     @FillField
     @PreAuthorize("hasRole('ROLE_SYS_USER_SELECT')")
     public UserRespVo find(Long id) {
@@ -54,7 +52,7 @@ public class UserController {
     }
 
     @ApiOperation("分页")
-    @RequestMapping("page")
+    @PostMapping("page")
     @FillField
     @PreAuthorize("hasRole('ROLE_SYS_USER_SELECT')")
     public PageResult page(@Validated @RequestBody UserPageReqVo reqVo) {
@@ -62,7 +60,7 @@ public class UserController {
     }
 
     @ApiOperation("列表")
-    @RequestMapping("list")
+    @PostMapping("list")
     @FillField
     @PreAuthorize("hasRole('ROLE_SYS_USER_SELECT')")
     public List<UserRespVo> list(@Validated @RequestBody UserReqVo reqVo) {
@@ -70,28 +68,28 @@ public class UserController {
     }
 
     @ApiOperation("创建")
-    @RequestMapping("create")
+    @PostMapping("create")
     @PreAuthorize("hasRole('ROLE_SYS_USER_CREATE')")
     public Long create(@Validated @RequestBody UserReqVo userReqVo) {
         return iUserServiceComp.create(userReqVo);
     }
 
     @ApiOperation("更新")
-    @RequestMapping("update")
+    @PostMapping("update")
     @PreAuthorize("hasRole('ROLE_SYS_USER_UPDATE')")
     public void update(@Validated @RequestBody UserReqVo userReqVo) {
         iUserServiceComp.update(userReqVo);
     }
 
     @ApiOperation(value = "批量更新", notes = "传入id")
-    @RequestMapping("batch-update")
+    @PostMapping("batch-update")
     @PreAuthorize("hasRole('ROLE_SYS_USER_UPDATE')")
     public void batchUpdate(@Validated @RequestBody IdStatusListVo idStatusListVo) {
         iUserServiceComp.updateBatch(idStatusListVo);
     }
 
     @ApiOperation(value = "批量删除", notes = "传入id")
-    @RequestMapping("batch-remove")
+    @PostMapping("batch-remove")
     @PreAuthorize("hasRole('ROLE_SYS_USER_REMOVE')")
     public void removeUpdate(@Validated @RequestBody IdListVo<Long> idListVo) {
         iUserServiceComp.removeBatch(idListVo);

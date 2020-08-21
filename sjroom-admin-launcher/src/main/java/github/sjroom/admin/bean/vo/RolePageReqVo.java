@@ -1,8 +1,11 @@
 package github.sjroom.admin.bean.vo;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import java.util.Date;
+
 import github.sjroom.core.mybatis.page.PageReqParam;
 
 /**
@@ -17,4 +20,6 @@ import github.sjroom.core.mybatis.page.PageReqParam;
 public class RolePageReqVo extends PageReqParam {
 
     // 业务按需添加分页参数
+    @ApiModelProperty("角色名称")
+    private String roleName;
 }

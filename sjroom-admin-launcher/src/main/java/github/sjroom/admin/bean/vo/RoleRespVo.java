@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -34,5 +35,5 @@ public class RoleRespVo {
     private Date createdAt;
 
     @ApiModelProperty("菜单集合列表")
-    private List<MenuReqVo> menus;
+    private Set<Long> menuIdList;
 }
