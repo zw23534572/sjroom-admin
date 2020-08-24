@@ -1,33 +1,55 @@
 <template>
-  <div class="site-wrapper site-page--login">
-    <div class="site-content__wrapper">
-      <div class="site-content">
-        <div class="brand-info">
-          <h2 class="brand-info__text">renren-fast-vue</h2>
-          <p class="brand-info__intro">renren-fast-vue基于vue、element-ui构建开发，实现renren-fast后台管理前端功能，提供一套更优的前端解决方案。</p>
+  <div class="login-container">
+    <div class="login-weaper animated bounceInDown">
+      <div class="login-left">
+        <div class="login-time">
+          欢迎使用
         </div>
+        <img :src="captchaPath" @click="getCaptcha()" alt="">
+        <p class="title">管理员登录</p>
+      </div>
+      <div class="login-border">
         <div class="login-main">
-          <h3 class="login-title">管理员登录</h3>
-          <el-form :model="dataForm" :rules="dataRule" ref="dataForm" @keyup.enter.native="dataFormSubmit()" status-icon>
-            <el-form-item prop="userName">
-              <el-input v-model="dataForm.userName" placeholder="帐号"></el-input>
+          <h4 class="login-title">
+            登录
+          </h4>
+          <el-form
+            ref="dataForm"
+            :rules="dataRule"
+            :model="dataForm"
+            class="login-form"
+            status-icon
+            @keyup.enter.native="dataFormSubmit()"
+            label-width="0">
+            <el-form-item prop="username">
+              <el-input
+                v-model="dataForm.username"
+                placeholder="请输入用户名"
+                size="small"
+                auto-complete="off"
+                @keyup.enter.native="dataFormSubmit()">
+                <i slot="prefix" class="icon-yonghu"/>
+              </el-input>
             </el-form-item>
             <el-form-item prop="password">
-              <el-input v-model="dataForm.password" type="password" placeholder="密码"></el-input>
+              <el-input
+                :type="passwordType"
+                v-model="dataForm.password"
+                placeholder="请输入密码"
+                size="small"
+                auto-complete="off"
+                @keyup.enter.native="dataFormSubmit()">
+                <i slot="suffix" class="el-icon-view el-input__icon" @click="showPwd()"/>
+                <i slot="prefix" class="icon-mima"/>
+              </el-input>
             </el-form-item>
-            <el-form-item prop="captcha">
-              <el-row :gutter="20">
-                <el-col :span="14">
-                  <el-input v-model="dataForm.captcha" placeholder="验证码">
-                  </el-input>
-                </el-col>
-                <el-col :span="10" class="login-captcha">
-                  <img :src="captchaPath" @click="getCaptcha()" alt="">
-                </el-col>
-              </el-row>
-            </el-form-item>
+
             <el-form-item>
-              <el-button class="login-btn-submit" type="primary" @click="dataFormSubmit()">登录</el-button>
+              <el-button
+                type="primary"
+                size="small"
+                class="login-submit"
+                @click.native.prevent="dataFormSubmit()">登录</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -43,13 +65,13 @@
     data () {
       return {
         dataForm: {
-          userName: '',
+          username: '',
           password: '',
           uuid: '',
           captcha: ''
         },
         dataRule: {
-          userName: [
+          username: [
             { required: true, message: '帐号不能为空', trigger: 'blur' }
           ],
           password: [
@@ -59,13 +81,22 @@
             { required: true, message: '验证码不能为空', trigger: 'blur' }
           ]
         },
-        captchaPath: ''
+        captchaPath: '',
+        passwordType: 'password'
       }
     },
     created () {
       this.getCaptcha()
     },
     methods: {
+      // 密码显示
+      showPwd () {
+        if (this.passwordType === 'password') {
+          this.passwordType = ''
+        } else {
+          this.passwordType = 'password'
+        }
+      },
       // 提交表单
       dataFormSubmit () {
         this.$refs['dataForm'].validate((valid) => {
@@ -74,7 +105,7 @@
               url: this.$http.adornUrl('/login'),
               method: 'post',
               data: this.$http.adornData({
-                'username': this.dataForm.userName,
+                'username': this.dataForm.username,
                 'password': md5(this.dataForm.password),
                 'uuid': this.dataForm.uuid,
                 'captcha': this.dataForm.captcha
@@ -100,80 +131,186 @@
   }
 </script>
 
+<style>
+  html { height: 100%}
+
+  body { height: 100%}
+
+  .msg-text {
+    display: block;
+    width: 60px;
+    font-size: 12px;
+    text-align: center;
+    cursor: pointer;
+  }
+  .msg-text.display {
+    color: #ccc;
+  }
+</style>
+
+
 <style lang="scss">
-  .site-wrapper.site-page--login {
+  .login-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    background: url("http://www.17sucai.com/preview/242158/2015-01-10/%E7%99%BB%E5%BD%95/images/cloud.jpg")
+    0 bottom repeat-x #049ec4;
+    animation: animate-cloud 20s linear infinite;
+  }
+  .login-weaper {
+    margin: 0 auto;
+    width: 1000px;
+    box-shadow: -4px 5px 10px rgba(0, 0, 0, 0.4);
+    .el-input-group__append {
+      border: none;
+    }
+  }
+
+  .login-left,
+  .login-border {
+    position: relative;
+    min-height: 500px;
+    align-items: center;
+    display: flex;
+  }
+  .login-left {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #409EFF;
+    color: #fff;
+    float: left;
+    width: 50%;
+    position: relative;
+  }
+  .login-left .img {
+    width: 140px;
+  }
+  .login-time {
     position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(38, 50, 56, .6);
+    left: 25px;
+    top: 25px;
+    width: 100%;
+    color: #fff;
+    font-weight: 200;
+    opacity: 0.9;
+    font-size: 18px;
     overflow: hidden;
-    &:before {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
+  }
+  .login-left .title {
+    margin-top: 60px;
+    text-align: center;
+    color: #fff;
+    font-weight: 300;
+    letter-spacing: 2px;
+    font-size: 25px;
+  }
+
+  .login-border {
+    border-left: none;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    color: #fff;
+    background-color: #fff;
+    width: 50%;
+    float: left;
+    box-sizing: border-box;
+  }
+  .login-main {
+    margin: 0 auto;
+    width: 65%;
+    box-sizing: border-box;
+  }
+  .login-main > h3 {
+    margin-bottom: 20px;
+  }
+  .login-main > p {
+    color: #76838f;
+  }
+  .login-title {
+    color: #333;
+    margin-bottom: 40px;
+    font-weight: 500;
+    font-size: 22px;
+    text-align: center;
+    letter-spacing: 4px;
+  }
+  .login-menu {
+    margin-top: 40px;
+    width: 100%;
+    text-align: center;
+    a {
+      color: #999;
+      font-size: 12px;
+      margin: 0px 8px;
+    }
+  }
+  .login-submit {
+    width: 100%;
+    height: 45px;
+    border: 1px solid #409EFF;
+    background: none;
+    font-size: 18px;
+    letter-spacing: 2px;
+    font-weight: 300;
+    color: #409EFF;
+    cursor: pointer;
+    margin-top: 30px;
+    font-family: "neo";
+    transition: 0.25s;
+  }
+  .login-form {
+    margin: 10px 0;
+    i {
+      color: #333;
+    }
+    .el-form-item__content {
       width: 100%;
-      height: 100%;
-      content: "";
-      background-image: url(~@/assets/img/login_bg.jpg);
-      background-size: cover;
     }
-    .site-content__wrapper {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      padding: 0;
-      margin: 0;
-      overflow-x: hidden;
-      overflow-y: auto;
-      background-color: transparent;
+    .el-form-item {
+      margin-bottom: 12px;
     }
-    .site-content {
-      min-height: 100%;
-      padding: 30px 500px 30px 30px;
-    }
-    .brand-info {
-      margin: 220px 100px 0 90px;
-      color: #fff;
-    }
-    .brand-info__text {
-      margin:  0 0 22px 0;
-      font-size: 48px;
-      font-weight: 400;
-      text-transform : uppercase;
-    }
-    .brand-info__intro {
-      margin: 10px 0;
-      font-size: 16px;
-      line-height: 1.58;
-      opacity: .6;
-    }
-    .login-main {
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 150px 60px 180px;
-      width: 470px;
-      min-height: 100%;
-      background-color: #fff;
-    }
-    .login-title {
-      font-size: 16px;
-    }
-    .login-captcha {
-      overflow: hidden;
-      > img {
-        width: 100%;
-        cursor: pointer;
+    .el-input {
+      input {
+        padding-bottom: 10px;
+        text-indent: 5px;
+        background: transparent;
+        border: none;
+        border-radius: 0;
+        color: #333;
+        border-bottom: 1px solid rgb(235, 237, 242);
+      }
+      .el-input__prefix {
+        i {
+          padding: 0 5px;
+          font-size: 16px !important;
+        }
       }
     }
-    .login-btn-submit {
-      width: 100%;
-      margin-top: 38px;
-    }
+  }
+  .login-code {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0 0 0 10px;
+  }
+  .login-code-img {
+    margin-top: 2px;
+    width: 100px;
+    height: 38px;
+    background-color: #fdfdfd;
+    border: 1px solid #f0f0f0;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 5px;
+    line-height: 38px;
+    text-indent: 5px;
+    text-align: center;
   }
 </style>
