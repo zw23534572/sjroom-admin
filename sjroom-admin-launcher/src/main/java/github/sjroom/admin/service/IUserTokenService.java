@@ -27,6 +27,14 @@ public interface IUserTokenService extends BaseService<UserToken> {
 	UserTokenBo findByBId(Long userTokenId);
 
 	/**
+	 * token 值
+	 *
+	 * @param token 值
+	 * @return
+	 */
+	UserTokenBo findByToken(String token);
+
+	/**
 	 * 列表
 	 *
 	 * @param userTokenIds 业务主键Id

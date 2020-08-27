@@ -44,6 +44,13 @@ public class UserTokenServiceImpl extends BaseServiceImpl<IUserTokenDao, UserTok
     }
 
     @Override
+    public UserTokenBo findByToken(String token) {
+        LambdaQueryWrapper<UserToken> wrapper = new LambdaQueryWrapper<UserToken>();
+        wrapper.eq(StringUtil.isNotBlank(token), UserToken::getToken,token);
+        return BeanUtil.copy(super.getOne(wrapper), UserTokenBo.class);
+    }
+
+    @Override
     public List<UserTokenBo> findByBIds(Set<Long> userTokenIds) {
         List<UserToken> userTokens = super.getBatchBIds(userTokenIds);
         return BeanUtil.copy(userTokens, UserTokenBo.class);
